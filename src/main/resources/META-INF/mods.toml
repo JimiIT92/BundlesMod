@@ -1,0 +1,13 @@
+modLoader = "javafml"
+loaderVersion = "[28,)"
+[[mods]]
+modId = "bundles"
+version = "${file.jarVersion}"
+displayName = "Bundles"
+displayURL="https://github.com/JimiIT92/BundlesMod"
+logoFile="bundles.png"
+credits="Mojang for showing this during the Minecraft Live 2020 Caves & Cliffs update showcase"
+authors = "JimiIT92"
+description = '''
+Manage Inventory space with the new Bundles!
+'''
