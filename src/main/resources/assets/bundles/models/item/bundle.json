@@ -2,5 +2,13 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "bundles:item/bundle"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "bundles:bundle_full": 1.0
+      },
+      "model": "bundles:item/bundle_full"
+    }
+  ]
 }
