@@ -1,17 +1,26 @@
 package com.bundles.util;
 
-import com.bundles.Bundles;
+import com.bundles.init.BundleItems;
+import com.bundles.init.BundleResources;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Register Client Events
  *
  * @author JimiIT92
  */
-@Mod.EventBusSubscriber(modid = Bundles.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = BundleResources.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientEventBusSubscriber {
 
     /**
@@ -21,22 +30,15 @@ public final class ClientEventBusSubscriber {
      */
     @SubscribeEvent
     public static void clientSetup(final FMLClientSetupEvent event) {
-        /*BundleItems.BUNDLE.get().addPropertyOverride(new ResourceLocation(TutorialMod.MOD_ID, "count"), new IItemPropertyGetter() {
+        event.enqueueWork(() -> ItemModelsProperties.func_239418_a_(
+                BundleItems.BUNDLE.get()
+                , BundleResources.BUNDLE_FULL_NBT_RESOURCE_LOCATION
+                , new IItemPropertyGetter() {
+            @ParametersAreNonnullByDefault
             @Override
-            public float call(ItemStack itemStack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
-                switch (itemStack.getCount()) {
-                    case 1:
-                        return 0.25F;
-                    case 2:
-                        return 0.5F;
-                    case 3:
-                        return 0.75F;
-                    case 4:
-                        return 1.0F;
-                    default:
-                        return 0.0F;
-                }
+            public float call(ItemStack itemStack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
+                return BundleItemUtils.isFull(itemStack) ? 1.0F : 0.0F;
             }
-        });*/
+        }));
     }
 }

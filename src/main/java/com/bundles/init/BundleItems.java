@@ -1,6 +1,5 @@
 package com.bundles.init;
 
-import com.bundles.Bundles;
 import com.bundles.item.BundleItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
@@ -17,10 +16,10 @@ public final class BundleItems {
     /**
      * Bundle Items Registry
      */
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Bundles.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BundleResources.MOD_ID);
 
     /**
-     * Bundle
+     * Bundle Item
      */
-    public static final RegistryObject<Item> BUNDLE = ITEMS.register("bundle", BundleItem::new);
+    public static final RegistryObject<Item> BUNDLE = ITEMS.register(BundleResources.BUNDLE_ITEM_RESOURCE_NAME, BundleItem::new);
 }

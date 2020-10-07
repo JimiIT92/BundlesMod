@@ -4,7 +4,7 @@ license = "MIT License. Found at https://github.com/JimiIT92/BundlesMod/blob/mas
 [[mods]]
 modId = "bundles"
 version = "${file.jarVersion}"
-displayName = "Bundles"
+displayName = "Bundles!"
 displayURL="https://github.com/JimiIT92/BundlesMod"
 logoFile="bundles.png"
 credits="Mojang for showing this during the Minecraft Live 2020 Caves & Cliffs update showcase"
