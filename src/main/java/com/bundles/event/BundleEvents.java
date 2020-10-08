@@ -4,10 +4,10 @@ import com.bundles.util.BundleItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundEvents;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -37,11 +37,14 @@ public final class BundleEvents {
                 if(player != null) {
                     ItemStack draggedItemStack = player.inventory.getItemStack();
                     ItemStack slotStack = slot.getStack();
-                    if(slot.canTakeStack(player) && slot.getHasStack() && event.getButton() == 0
+                    Container container = containerScreen.getContainer();
+                    if(slot.canTakeStack(player) && slot.isEnabled()
+                            && container.canMergeSlot(draggedItemStack, slot)
+                            && slot.isItemValid(draggedItemStack)
+                            && slot.getHasStack() && event.getButton() == 0
                             && BundleItemUtils.isBundle(draggedItemStack)
                             && BundleItemUtils.canAddItemStackToBundle(draggedItemStack, slotStack)) {
-                        BundleItemUtils.addItemStackToBundle(draggedItemStack, slotStack);
-                        player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
+                        BundleItemUtils.addItemStackToBundle(draggedItemStack, slotStack, player, container);
                         event.setResult(Event.Result.DENY);
                         event.setCanceled(true);
                     }
@@ -65,11 +68,10 @@ public final class BundleEvents {
                 PlayerEntity player = Minecraft.getInstance().player;
                 if(player != null) {
                     ItemStack slotStack = slot.getStack();
-                    if(slot.canTakeStack(player) && slot.getHasStack() && event.getButton() == 1
+                    if(slot.canTakeStack(player) && slot.isEnabled()
+                            && slot.getHasStack() && event.getButton() == 1
                             && BundleItemUtils.isBundle(slotStack)) {
-                        BundleItemUtils.emptyBundle(slotStack, player);
-                        containerScreen.getContainer().detectAndSendChanges();
-                        player.playSound(SoundEvents.BLOCK_WOOL_BREAK, 1.0F, 1.0F);
+                        BundleItemUtils.emptyBundle(slotStack, player, containerScreen.getContainer());
                         event.setResult(Event.Result.DENY);
                         event.setCanceled(true);
                     }
@@ -77,4 +79,5 @@ public final class BundleEvents {
             }
         }
     }
+
 }
