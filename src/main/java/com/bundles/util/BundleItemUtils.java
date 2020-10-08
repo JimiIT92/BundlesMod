@@ -3,6 +3,7 @@ package com.bundles.util;
 import com.bundles.init.BundleResources;
 import com.bundles.item.BundleItem;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -51,7 +52,10 @@ public final class BundleItemUtils {
         if(!isBundle(bundle) || isFull(bundle)) {
             return false;
         }
-        return true;
+        ItemStack bundleItemStack = getItemStackFor(bundle, stack.getItem());
+        int maxStackSize = stack.getMaxStackSize();
+        return bundleItemStack.isEmpty() || maxStackSize == 1
+                || (maxStackSize > 1 && bundleItemStack.getCount() < (maxStackSize / 2));
     }
 
     /**
@@ -113,5 +117,16 @@ public final class BundleItemUtils {
         CompoundNBT bundleTag = bundle.getOrCreateTag();
         ListNBT items = bundleTag.getList(BundleResources.BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION, Constants.NBT.TAG_COMPOUND);
         return items.stream().map(x -> ItemStack.read((CompoundNBT) x)).collect(Collectors.toList());
+    }
+
+    /**
+     * Get the Item Stack for an Item
+     *
+     * @param bundle Bundle Item Stack
+     * @param item Item to get the Item Stack
+     * @return Item Stack for the Item or Empty Item Stack if not found
+     */
+    public static ItemStack getItemStackFor(ItemStack bundle, Item item) {
+        return getItemsFromBundle(bundle).stream().filter(x -> x.getItem().equals(item)).findFirst().orElse(ItemStack.EMPTY);
     }
 }

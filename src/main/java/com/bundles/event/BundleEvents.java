@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -40,6 +41,7 @@ public final class BundleEvents {
                             && BundleItemUtils.isBundle(draggedItemStack)
                             && BundleItemUtils.canAddItemStackToBundle(draggedItemStack, slotStack)) {
                         BundleItemUtils.addItemStackToBundle(draggedItemStack, slotStack);
+                        player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
                         event.setResult(Event.Result.DENY);
                         event.setCanceled(true);
                     }
@@ -66,6 +68,8 @@ public final class BundleEvents {
                     if(slot.canTakeStack(player) && slot.getHasStack() && event.getButton() == 1
                             && BundleItemUtils.isBundle(slotStack)) {
                         BundleItemUtils.emptyBundle(slotStack, player);
+                        containerScreen.getContainer().detectAndSendChanges();
+                        player.playSound(SoundEvents.BLOCK_WOOL_BREAK, 1.0F, 1.0F);
                         event.setResult(Event.Result.DENY);
                         event.setCanceled(true);
                     }
