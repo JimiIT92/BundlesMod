@@ -20,4 +20,8 @@ public final class BundleResources {
      * Bundle Full NBT Tag Resource Location
      */
     public static final ResourceLocation BUNDLE_FULL_NBT_RESOURCE_LOCATION = new ResourceLocation(MOD_ID, "bundle_full");
+    /**
+     * Bundle Items NBT Tag Resource Location
+     */
+    public static final String BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION = "bundle_items";
 }
