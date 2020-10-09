@@ -3,8 +3,10 @@ package com.bundles.util;
 import com.bundles.init.BundleResources;
 import com.bundles.item.BundleItem;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -117,7 +119,6 @@ public final class BundleItemUtils {
         bundle.setTag(bundleTag);
         stack.setCount(stack.getCount() - stackToAdd.getCount());
         bundle.setDamage(bundle.getMaxDamage() - getBundleItemsCount(bundle));
-        container.detectAndSendChanges();
         player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
     }
 
@@ -139,7 +140,6 @@ public final class BundleItemUtils {
         bundleTag.put(BundleResources.BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION, items);
         bundle.setTag(bundleTag);
         bundle.setDamage(0);
-        container.detectAndSendChanges();
         player.playSound(SoundEvents.BLOCK_WOOL_BREAK, 1.0F, 1.0F);
     }
 
@@ -149,7 +149,7 @@ public final class BundleItemUtils {
      * @param bundle Bundle Item Stack
      * @return Bundle Items Count
      */
-    private static int getBundleItemsCount(ItemStack bundle) {
+    public static int getBundleItemsCount(ItemStack bundle) {
         return Objects.requireNonNull(getItemsFromBundle(bundle)).stream().mapToInt(ItemStack::getCount).sum();
     }
 
@@ -213,5 +213,15 @@ public final class BundleItemUtils {
      */
     private static int getMaxStackSizeForBundle(ItemStack stack) {
         return Math.max(1, stack.getMaxStackSize()/2);
+    }
+
+    /**
+     * Check if the Container is valid for using a Bundle
+     *
+     * @param container Container
+     * @return True if the Container is valid for using a Bundle, False otherwise
+     */
+    public static boolean isValidContainerForBundle(Container container) {
+        return container instanceof PlayerContainer || container instanceof CreativeScreen.CreativeContainer;
     }
 }

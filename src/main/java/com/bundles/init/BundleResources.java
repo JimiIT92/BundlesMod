@@ -1,6 +1,7 @@
 package com.bundles.init;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 /**
  * Bundle Resources
@@ -24,4 +25,24 @@ public final class BundleResources {
      * Bundle Items NBT Tag Resource Location
      */
     public static final String BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION = "bundle_items";
+    /**
+     * Network Channel
+     */
+    public static SimpleChannel NETWORK;
+    /**
+     * Bundle Server Message ID
+     */
+    public static final byte BUNDLE_SERVER_MESSAGE_ID = 1;
+    /**
+     * Bundle Client Message ID
+     */
+    public static final byte BUNDLE_CLIENT_MESSAGE_ID = 2;
+    /**
+     * Message Protocol Version
+     */
+    public static final String MESSAGE_PROTOCOL_VERSION = "1.0";
+    /**
+     * Network Resource Location
+     */
+    public static final ResourceLocation NETWORK_RESOURCE_LOCATION = new ResourceLocation(MOD_ID, "network_channel");
 }

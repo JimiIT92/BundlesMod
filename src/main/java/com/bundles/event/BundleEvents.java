@@ -1,5 +1,7 @@
 package com.bundles.event;
 
+import com.bundles.init.BundleResources;
+import com.bundles.network.message.BundleServerMessage;
 import com.bundles.util.BundleItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -9,9 +11,12 @@ import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.List;
 
 /**
  * Bundle Events
@@ -31,6 +36,9 @@ public final class BundleEvents {
     public static void onMouseReleased(final GuiScreenEvent.MouseReleasedEvent event) {
         if(!event.isCanceled() && event.getGui() instanceof ContainerScreen<?>) {
             ContainerScreen<?> containerScreen = (ContainerScreen<?>)event.getGui();
+            if(!BundleItemUtils.isValidContainerForBundle(containerScreen.getContainer())) {
+                return;
+            }
             Slot slot = containerScreen.getSlotUnderMouse();
             if(slot != null && !(slot instanceof CraftingResultSlot)) {
                 PlayerEntity player = Minecraft.getInstance().player;
@@ -44,7 +52,7 @@ public final class BundleEvents {
                             && slot.getHasStack() && event.getButton() == 0
                             && BundleItemUtils.isBundle(draggedItemStack)
                             && BundleItemUtils.canAddItemStackToBundle(draggedItemStack, slotStack)) {
-                        BundleItemUtils.addItemStackToBundle(draggedItemStack, slotStack, player, container);
+                        BundleResources.NETWORK.sendToServer(new BundleServerMessage(draggedItemStack, Math.max(slot.slotNumber, slot.getSlotIndex()), false));
                         event.setResult(Event.Result.DENY);
                         event.setCanceled(true);
                     }
@@ -63,6 +71,9 @@ public final class BundleEvents {
     public static void onMouseClick(final GuiScreenEvent.MouseClickedEvent event) {
         if(!event.isCanceled() && event.getGui() instanceof ContainerScreen<?>) {
             ContainerScreen<?> containerScreen = (ContainerScreen<?>)event.getGui();
+            if(!BundleItemUtils.isValidContainerForBundle(containerScreen.getContainer())) {
+                return;
+            }
             Slot slot = containerScreen.getSlotUnderMouse();
             if(slot != null && !(slot instanceof CraftingResultSlot)) {
                 PlayerEntity player = Minecraft.getInstance().player;
@@ -71,7 +82,7 @@ public final class BundleEvents {
                     if(slot.canTakeStack(player) && slot.isEnabled()
                             && slot.getHasStack() && event.getButton() == 1
                             && BundleItemUtils.isBundle(slotStack)) {
-                        BundleItemUtils.emptyBundle(slotStack, player, containerScreen.getContainer());
+                        BundleResources.NETWORK.sendToServer(new BundleServerMessage(slotStack, Math.max(slot.slotNumber, slot.getSlotIndex()), true));
                         event.setResult(Event.Result.DENY);
                         event.setCanceled(true);
                     }
@@ -80,4 +91,10 @@ public final class BundleEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onRenderTooltip(final RenderTooltipEvent.PostText event) {
+        if(BundleItemUtils.isBundle(event.getStack())) {
+            List<?> lines = event.getLines();
+        }
+    }
 }
