@@ -7,7 +7,7 @@ This is like an early game version of the Shulker Box, allowing you to save some
 
 # ⚙ How to get a Bundle?
 Getting a Bundle is really easy, as it doesn't require too much materials. All you need are just 3 pieces of leather and 1 piece of string to create a Bundle!
-<img src="https://media.forgecdn.net/attachments/316/255/crafting.png" />
+<img src="https://media.forgecdn.net/attachments/316/256/crafting.png" />
 
 # 🤔 How does it work?
 Select the Bundle from your inventory, then left click on a stack to put it inside the Bundle. 
