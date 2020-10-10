@@ -66,9 +66,12 @@ public class BundleServerMessageHandler {
             slotStack = message.bundle;
         } else {
             BundleItemUtils.addItemStackToBundle(message.bundle, slotStack, playerEntity, container);
+            if(!playerEntity.isCreative()) {
+                playerEntity.inventory.setItemStack(message.bundle);
+            }
         }
         slot.putStack(slotStack);
+        container.detectAndSendChanges();
         BundleResources.NETWORK.send(PacketDistributor.PLAYER.with(() -> playerEntity), new BundleClientMessage(message.bundle, message.slotId, slotStack, message.empty));
-        //container.detectAndSendChanges();
     }
 }

@@ -56,7 +56,7 @@ public final class BundleEvents {
                             Field slotIndexField = Slot.class.getDeclaredField("slotIndex");
                             slotIndexField.setAccessible(true);
                             int slotIndex = (int)slotIndexField.get(slot);
-                            BundleResources.NETWORK.sendToServer(new BundleServerMessage(draggedItemStack, slotIndex, false));
+                            BundleResources.NETWORK.sendToServer(new BundleServerMessage(draggedItemStack, player.isCreative() ? slotIndex : slot.slotNumber, false));
                             event.setResult(Event.Result.DENY);
                             event.setCanceled(true);
                         } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -93,7 +93,7 @@ public final class BundleEvents {
                             Field slotIndexField = Slot.class.getDeclaredField("slotIndex");
                             slotIndexField.setAccessible(true);
                             int slotIndex = (int)slotIndexField.get(slot);
-                            BundleResources.NETWORK.sendToServer(new BundleServerMessage(slotStack, slotIndex, true));
+                            BundleResources.NETWORK.sendToServer(new BundleServerMessage(slotStack, player.isCreative() ? slotIndex : slot.slotNumber, true));
                             event.setResult(Event.Result.DENY);
                             event.setCanceled(true);
                         } catch (NoSuchFieldException | IllegalAccessException e) {
