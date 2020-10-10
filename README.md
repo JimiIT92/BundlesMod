@@ -1,5 +1,5 @@
 # PACK MY BUNDLES! ![CodeQL](https://github.com/JimiIT92/BundlesMod/workflows/CodeQL/badge.svg)
-<p align="center"><img align="center" width=40% height=40% src="logo.png"/></p>
+<p align="center"><img align="center" width=10% height=10% src="logo.png"/></p>
 
 During Minecraft Live 2020 Mojang announced that in 1.17 a new item will be introduced to the game: the Bundle! 
 This is like an early game version of the Shulker Box, allowing you to save some inventory space.
