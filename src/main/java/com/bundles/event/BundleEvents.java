@@ -5,6 +5,7 @@ import com.bundles.network.message.BundleServerMessage;
 import com.bundles.util.BundleItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.CraftingResultSlot;
@@ -35,10 +36,6 @@ public final class BundleEvents {
     public static void onMouseReleased(final GuiScreenEvent.MouseReleasedEvent event) {
         if(!event.isCanceled() && event.getGui() instanceof ContainerScreen<?>) {
             ContainerScreen<?> containerScreen = (ContainerScreen<?>)event.getGui();
-            if(!BundleItemUtils.isValidContainerForBundle(containerScreen.getContainer())) {
-                return;
-            }
-
             Slot slot = containerScreen.getSlotUnderMouse();
             if(slot != null && !(slot instanceof CraftingResultSlot)) {
                 PlayerEntity player = Minecraft.getInstance().player;
@@ -55,8 +52,10 @@ public final class BundleEvents {
                         try {
                             Field slotIndexField = Slot.class.getDeclaredField("slotIndex");
                             slotIndexField.setAccessible(true);
-                            int slotIndex = (int)slotIndexField.get(slot);
-                            BundleResources.NETWORK.sendToServer(new BundleServerMessage(draggedItemStack, player.isCreative() ? slotIndex : slot.slotNumber, false));
+                            int slotIndex = player.isCreative() && container instanceof CreativeScreen.CreativeContainer ?
+                                    (int)slotIndexField.get(slot)
+                                    : slot.slotNumber;
+                            BundleResources.NETWORK.sendToServer(new BundleServerMessage(draggedItemStack, slotIndex, false));
                             event.setResult(Event.Result.DENY);
                             event.setCanceled(true);
                         } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -78,9 +77,6 @@ public final class BundleEvents {
     public static void onMouseClick(final GuiScreenEvent.MouseClickedEvent event) {
         if(!event.isCanceled() && event.getGui() instanceof ContainerScreen<?>) {
             ContainerScreen<?> containerScreen = (ContainerScreen<?>)event.getGui();
-            if(!BundleItemUtils.isValidContainerForBundle(containerScreen.getContainer())) {
-                return;
-            }
             Slot slot = containerScreen.getSlotUnderMouse();
             if(slot != null && !(slot instanceof CraftingResultSlot)) {
                 PlayerEntity player = Minecraft.getInstance().player;
@@ -92,7 +88,9 @@ public final class BundleEvents {
                         try {
                             Field slotIndexField = Slot.class.getDeclaredField("slotIndex");
                             slotIndexField.setAccessible(true);
-                            int slotIndex = (int)slotIndexField.get(slot);
+                            int slotIndex = player.isCreative() && containerScreen.getContainer() instanceof CreativeScreen.CreativeContainer ?
+                                    (int)slotIndexField.get(slot)
+                                    : slot.slotNumber;
                             BundleResources.NETWORK.sendToServer(new BundleServerMessage(slotStack, player.isCreative() ? slotIndex : slot.slotNumber, true));
                             event.setResult(Event.Result.DENY);
                             event.setCanceled(true);

@@ -6,6 +6,7 @@ import com.bundles.network.message.BundleServerMessage;
 import com.bundles.util.BundleItemUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
@@ -66,7 +67,7 @@ public class BundleServerMessageHandler {
             slotStack = message.bundle;
         } else {
             BundleItemUtils.addItemStackToBundle(message.bundle, slotStack, playerEntity, container);
-            if(!playerEntity.isCreative()) {
+            if(!playerEntity.isCreative() || !(container instanceof PlayerContainer)) {
                 playerEntity.inventory.setItemStack(message.bundle);
             }
         }

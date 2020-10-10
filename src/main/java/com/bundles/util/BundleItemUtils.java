@@ -3,10 +3,8 @@ package com.bundles.util;
 import com.bundles.init.BundleResources;
 import com.bundles.item.BundleItem;
 import net.minecraft.block.Block;
-import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -221,15 +219,5 @@ public final class BundleItemUtils {
      */
     private static int getMaxStackSizeForBundle(ItemStack stack) {
         return Math.max(1, stack.getMaxStackSize()/2);
-    }
-
-    /**
-     * Check if the Container is valid for using a Bundle
-     *
-     * @param container Container
-     * @return True if the Container is valid for using a Bundle, False otherwise
-     */
-    public static boolean isValidContainerForBundle(Container container) {
-        return container instanceof PlayerContainer || container instanceof CreativeScreen.CreativeContainer;
     }
 }
