@@ -1,4 +1,5 @@
-# PACK MY BUNDLES! ![CodeQL](https://github.com/JimiIT92/BundlesMod/workflows/CodeQL/badge.svg)
+# PACK MY BUNDLES! ![CodeQL](https://github.com/JimiIT92/BundlesMod/workflows/CodeQL/badge.svg) ![https://minecraft.net/](https://img.shields.io/badge/Minecraft-1.16.3-success) ![https://forums.minecraftforge.net/](https://img.shields.io/badge/Forge-1.16.3--34.1.16-important)
+
 <p align="center"><img align="center" width=10% height=10% src="logo.png"/></p>
 
 During Minecraft Live 2020 Mojang announced that in 1.17 a new item will be introduced to the game: the Bundle! 
