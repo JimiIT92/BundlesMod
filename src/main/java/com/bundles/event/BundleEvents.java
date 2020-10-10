@@ -3,6 +3,7 @@ package com.bundles.event;
 import com.bundles.init.BundleResources;
 import com.bundles.network.message.BundleServerMessage;
 import com.bundles.util.BundleItemUtils;
+import com.bundles.util.BundleTooltipUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
@@ -12,6 +13,7 @@ import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -106,16 +108,13 @@ public final class BundleEvents {
     /**
      * Draw the Bundle Tooltip
      *
-     * @param event Draw Screen Event
+     * @param event Render Tooltip Event
      */
     @SubscribeEvent
-    public static void onToolTipRender(final GuiScreenEvent.DrawScreenEvent event) {
-        if(event.getGui() instanceof ContainerScreen<?>) {
-            ContainerScreen<?> containerScreen = (ContainerScreen<?>)event.getGui();
-            Slot slot = containerScreen.getSlotUnderMouse();
-            if(slot != null && BundleItemUtils.isBundle(slot.getStack()) && BundleItemUtils.isEmpty(slot.getStack())) {
-                //System.out.println("DRAW BUNDLE TOOLTIP");
-            }
+    public static void onTooltipRender(final RenderTooltipEvent.Pre event) {
+        if(BundleItemUtils.isBundle(event.getStack())) {
+            event.setCanceled(true);
+            BundleTooltipUtil.drawBundleTooltip(event);
         }
     }
 }

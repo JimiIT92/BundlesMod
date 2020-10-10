@@ -2,15 +2,9 @@ package com.bundles.item;
 
 import com.bundles.init.BundleResources;
 import com.bundles.util.BundleItemUtils;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 
 /**
  * Bundle Item
@@ -71,24 +65,5 @@ public class BundleItem extends Item {
     @Override
     public boolean isDamaged(ItemStack stack) {
         return false;
-    }
-
-    /**
-     * Show the Items inside the Bundle on the Tooltip
-     * @param stack Bundle Item Stack
-     * @param worldIn World
-     * @param tooltip Tooltip List
-     * @param flagIn Tooltip flag
-     */
-    @ParametersAreNonnullByDefault
-    @Override
-    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        BundleItemUtils.getItemsFromBundle(stack).forEach(x -> tooltip.add(x.getDisplayName()
-                    .func_230532_e_()
-                    .func_240702_b_(" x")
-                    .func_240702_b_(String.valueOf(x.getCount()))
-                )
-        );
-        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 }
