@@ -1,12 +1,12 @@
-# PACK MY BUNDLES! ![CodeQL](https://github.com/JimiIT92/BundlesMod/workflows/CodeQL/badge.svg)
-<p align="center"><img align="center" width=10% height=10% src="logo.png"/></p>
+# PACK MY BUNDLES! <img align="left" width=4% height=4% src="logo.png"/> ![CodeQL](https://github.com/JimiIT92/BundlesMod/workflows/CodeQL/badge.svg) [![](https://img.shields.io/badge/Minecraft-1.16.3-success)](https://minecraft.net/) [![](https://img.shields.io/badge/Forge-1.16.3--34.1.16-important)](https://forums.minecraftforge.net/) [![](http://cf.way2muchnoise.eu/full_412219_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/pack-my-bundles)
 
 During Minecraft Live 2020 Mojang announced that in 1.17 a new item will be introduced to the game: the Bundle! 
 This is like an early game version of the Shulker Box, allowing you to save some inventory space.
 
 # ⚙ How to get a Bundle?
 Getting a Bundle is really easy, as it doesn't require too much materials. All you need are just 3 pieces of leather and 1 piece of string to create a Bundle!
-<img src="https://media.forgecdn.net/attachments/316/255/crafting.png" />
+
+<img src="https://i.imgur.com/v36aLS3.png" />
 
 # 🤔 How does it work?
 Select the Bundle from your inventory, then left click on a stack to put it inside the Bundle. 
