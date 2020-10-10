@@ -51,6 +51,16 @@ public final class BundleItemUtils {
     }
 
     /**
+     * Check if the Bundle is empty
+     *
+     * @param bundle Bundle Item Stack
+     * @return True if the Bundle is empty, False otherwise
+     */
+    public static boolean isEmpty(ItemStack bundle) {
+        return getBundleItemsCount(bundle) > 0;
+    }
+
+    /**
      * Check if an Item Stack can be added to a Bundle
      *
      * @param bundle Bundle Item Stack
@@ -118,7 +128,6 @@ public final class BundleItemUtils {
         bundleTag.put(BundleResources.BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION, items);
         bundle.setTag(bundleTag);
         stack.setCount(stack.getCount() - stackToAdd.getCount());
-        bundle.setDamage(bundle.getMaxDamage() - getBundleItemsCount(bundle));
         player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
     }
 
@@ -130,7 +139,7 @@ public final class BundleItemUtils {
      * @param container Container
      */
     public static void emptyBundle(ItemStack bundle, PlayerEntity player, Container container) {
-        if(!isBundle(bundle) || getBundleItemsCount(bundle) == 0) {
+        if(!isBundle(bundle) || isEmpty(bundle)) {
             return;
         }
         getItemsFromBundle(bundle).forEach(player::addItemStackToInventory);
@@ -139,7 +148,6 @@ public final class BundleItemUtils {
         items.clear();
         bundleTag.put(BundleResources.BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION, items);
         bundle.setTag(bundleTag);
-        bundle.setDamage(0);
         player.playSound(SoundEvents.BLOCK_WOOL_BREAK, 1.0F, 1.0F);
     }
 

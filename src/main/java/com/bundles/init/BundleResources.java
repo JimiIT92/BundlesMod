@@ -26,6 +26,10 @@ public final class BundleResources {
      */
     public static final String BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION = "bundle_items";
     /**
+     * Max Bundle Items Count
+     */
+    public static final int MAX_BUNDLE_ITEMS = 64;
+    /**
      * Network Channel
      */
     public static SimpleChannel NETWORK;

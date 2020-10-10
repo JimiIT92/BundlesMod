@@ -25,7 +25,7 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             mods {
-                mobvote {
+                bundles {
                     source sourceSets.main
                 }
             }
@@ -36,7 +36,7 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             mods {
-                mobvote {
+                bundles {
                     source sourceSets.main
                 }
             }
@@ -46,9 +46,9 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'mobvote', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'bundles', '--all', '--output', file('src/generated/resources/')
             mods {
-                mobvote {
+                bundles {
                     source sourceSets.main
                 }
             }
@@ -56,8 +56,24 @@ minecraft {
     }
 }
 
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
+    minecraft 'net.minecraftforge:forge:1.16.3-34.1.16'
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title": "Bundles",
+                "Specification-Vendor": "JimiIT92",
+                "Specification-Version": "1",
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${version}",
+                "Implementation-Vendor" :"JimiIT92",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }
 
 jar.finalizedBy('reobfJar')
