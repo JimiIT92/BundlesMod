@@ -1,6 +1,4 @@
-# PACK MY BUNDLES! ![CodeQL](https://github.com/JimiIT92/BundlesMod/workflows/CodeQL/badge.svg) ![https://minecraft.net/](https://img.shields.io/badge/Minecraft-1.16.3-success) ![https://forums.minecraftforge.net/](https://img.shields.io/badge/Forge-1.16.3--34.1.16-important)
-
-<p align="center"><img align="center" width=10% height=10% src="logo.png"/></p>
+# PACK MY BUNDLES! <img align="left" width=5% height=5% src="logo.png"/> ![CodeQL](https://github.com/JimiIT92/BundlesMod/workflows/CodeQL/badge.svg) [![](https://img.shields.io/badge/Minecraft-1.16.3-success)](https://minecraft.net/) [![](https://img.shields.io/badge/Forge-1.16.3--34.1.16-important)](https://forums.minecraftforge.net/) [![](http://cf.way2muchnoise.eu/full_412219_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/pack-my-bundles)
 
 During Minecraft Live 2020 Mojang announced that in 1.17 a new item will be introduced to the game: the Bundle! 
 This is like an early game version of the Shulker Box, allowing you to save some inventory space.
