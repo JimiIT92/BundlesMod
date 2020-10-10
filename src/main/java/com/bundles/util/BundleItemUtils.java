@@ -57,7 +57,7 @@ public final class BundleItemUtils {
      * @return True if the Bundle is empty, False otherwise
      */
     public static boolean isEmpty(ItemStack bundle) {
-        return getBundleItemsCount(bundle) > 0;
+        return getBundleItemsCount(bundle) == 0;
     }
 
     /**

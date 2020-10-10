@@ -6,7 +6,6 @@ import com.bundles.network.message.BundleServerMessage;
 import com.bundles.util.BundleItemUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
@@ -62,17 +61,14 @@ public class BundleServerMessageHandler {
         Container container = playerEntity.openContainer;
         Slot slot = container.getSlot(message.slotId);
         ItemStack slotStack = slot.getStack();
-        BundleResources.NETWORK.send(PacketDistributor.PLAYER.with(() -> playerEntity), new BundleClientMessage(message.bundle, message.slotId, message.empty));
         if(message.empty) {
             BundleItemUtils.emptyBundle(message.bundle, playerEntity, container);
             slotStack = message.bundle;
         } else {
             BundleItemUtils.addItemStackToBundle(message.bundle, slotStack, playerEntity, container);
-            if(!(container instanceof PlayerContainer) || !playerEntity.isCreative()) {
-                playerEntity.inventory.setItemStack(message.bundle);
-            }
         }
         slot.putStack(slotStack);
-        container.detectAndSendChanges();
+        BundleResources.NETWORK.send(PacketDistributor.PLAYER.with(() -> playerEntity), new BundleClientMessage(message.bundle, message.slotId, slotStack, message.empty));
+        //container.detectAndSendChanges();
     }
 }

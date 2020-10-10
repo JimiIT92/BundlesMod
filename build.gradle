@@ -56,8 +56,6 @@ minecraft {
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.3-34.1.16'
 }

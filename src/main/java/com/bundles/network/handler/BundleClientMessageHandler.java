@@ -2,12 +2,10 @@ package com.bundles.network.handler;
 
 import com.bundles.init.BundleResources;
 import com.bundles.network.message.BundleClientMessage;
-import com.bundles.util.BundleItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -59,13 +57,9 @@ public class BundleClientMessageHandler {
     private static void processMessage(BundleClientMessage message, ClientPlayerEntity playerEntity) {
         Container container = playerEntity.openContainer;
         Slot slot = container.getSlot(message.slotId);
-        ItemStack slotStack = slot.getStack();
-        if(message.empty) {
-            BundleItemUtils.emptyBundle(message.bundle, playerEntity, container);
-        } else {
-            BundleItemUtils.addItemStackToBundle(message.bundle, slotStack, playerEntity, container);
+        slot.putStack(message.slotStack);
+        if(!message.empty) {
             playerEntity.inventory.setItemStack(message.bundle);
-            slot.putStack(slotStack);
         }
     }
 

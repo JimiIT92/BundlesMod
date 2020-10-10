@@ -15,6 +15,8 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.lang.reflect.Field;
+
 /**
  * Bundle Events
  *
@@ -36,6 +38,7 @@ public final class BundleEvents {
             if(!BundleItemUtils.isValidContainerForBundle(containerScreen.getContainer())) {
                 return;
             }
+
             Slot slot = containerScreen.getSlotUnderMouse();
             if(slot != null && !(slot instanceof CraftingResultSlot)) {
                 PlayerEntity player = Minecraft.getInstance().player;
@@ -49,9 +52,16 @@ public final class BundleEvents {
                             && slot.getHasStack() && event.getButton() == 0
                             && BundleItemUtils.isBundle(draggedItemStack)
                             && BundleItemUtils.canAddItemStackToBundle(draggedItemStack, slotStack)) {
-                        BundleResources.NETWORK.sendToServer(new BundleServerMessage(draggedItemStack, Math.max(slot.slotNumber, slot.getSlotIndex()), false));
-                        event.setResult(Event.Result.DENY);
-                        event.setCanceled(true);
+                        try {
+                            Field slotIndexField = Slot.class.getDeclaredField("slotIndex");
+                            slotIndexField.setAccessible(true);
+                            int slotIndex = (int)slotIndexField.get(slot);
+                            BundleResources.NETWORK.sendToServer(new BundleServerMessage(draggedItemStack, slotIndex, false));
+                            event.setResult(Event.Result.DENY);
+                            event.setCanceled(true);
+                        } catch (NoSuchFieldException | IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -79,9 +89,16 @@ public final class BundleEvents {
                     if(slot.canTakeStack(player) && slot.isEnabled()
                             && slot.getHasStack() && event.getButton() == 1
                             && BundleItemUtils.isBundle(slotStack)) {
-                        BundleResources.NETWORK.sendToServer(new BundleServerMessage(slotStack, Math.max(slot.slotNumber, slot.getSlotIndex()), true));
-                        event.setResult(Event.Result.DENY);
-                        event.setCanceled(true);
+                        try {
+                            Field slotIndexField = Slot.class.getDeclaredField("slotIndex");
+                            slotIndexField.setAccessible(true);
+                            int slotIndex = (int)slotIndexField.get(slot);
+                            BundleResources.NETWORK.sendToServer(new BundleServerMessage(slotStack, slotIndex, true));
+                            event.setResult(Event.Result.DENY);
+                            event.setCanceled(true);
+                        } catch (NoSuchFieldException | IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -99,7 +116,7 @@ public final class BundleEvents {
             ContainerScreen<?> containerScreen = (ContainerScreen<?>)event.getGui();
             Slot slot = containerScreen.getSlotUnderMouse();
             if(slot != null && BundleItemUtils.isBundle(slot.getStack()) && BundleItemUtils.isEmpty(slot.getStack())) {
-                System.out.println("DRAW BUNDLE TOOLTIP");
+                //System.out.println("DRAW BUNDLE TOOLTIP");
             }
         }
     }
