@@ -10,18 +10,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.LanguageMap;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author JimiIT92
  */
 public class BundleTooltipUtil {
+
+    private static List<ItemStack> CACHED_ITEM_STACKS;
+    private static List<ItemStack> CACHED_TOOLTIP_ITEM_STACKS;
+    private static HashMap<ItemStack, Map.Entry<Integer, Integer>> CACHED_TOOLTIP_POSITIONS;
 
     /**
      * Draw the Bundle Tooltip
@@ -43,6 +47,33 @@ public class BundleTooltipUtil {
         int borderColorStart = GuiUtils.DEFAULT_BORDER_COLOR_START;
         int borderColorEnd = GuiUtils.DEFAULT_BORDER_COLOR_END;
         List<ItemStack> bundleItems = BundleItemUtils.getItemsFromBundle(stack);
+        boolean useCached = CACHED_ITEM_STACKS != null && bundleItems.size() == CACHED_ITEM_STACKS.size();
+        if(useCached) {
+            for (int i = 0; i < bundleItems.size(); i++) {
+                if(!ItemStack.areItemStacksEqual(bundleItems.get(i), CACHED_ITEM_STACKS.get(i))) {
+                    useCached = false;
+                    break;
+                }
+            }
+        }
+        if(!useCached) {
+            CACHED_ITEM_STACKS = bundleItems;
+            CACHED_TOOLTIP_POSITIONS = new HashMap<>();
+            List<ItemStack> tooltipItems = new ArrayList<>();
+            Random random = new Random();
+            bundleItems.forEach(x -> {
+                for (int i = 0; i < x.getCount(); i++) {
+                    ItemStack tooltipStack = x.copy();
+                    tooltipStack.setCount(1);
+                    tooltipStack.setDisplayName(new StringTextComponent("stack_" + i));
+                    tooltipItems.add(tooltipStack);
+                    CACHED_TOOLTIP_POSITIONS.put(tooltipStack,
+                            new AbstractMap.SimpleEntry<>(6 + random.nextInt(4) , 4 + random.nextInt(4)));
+                }
+            });
+            Collections.shuffle(tooltipItems);
+            CACHED_TOOLTIP_ITEM_STACKS = tooltipItems;
+        }
 
         if (!textLines.isEmpty())
         {
@@ -64,7 +95,7 @@ public class BundleTooltipUtil {
             if (tooltipX + tooltipTextWidth + 4 > screenWidth)
             {
                 tooltipX = mouseX - 16 - tooltipTextWidth;
-                if (tooltipX < 4) // if the tooltip doesn't fit on the screen
+                if (tooltipX < 4)
                 {
                     if (mouseX > screenWidth / 2)
                         tooltipTextWidth = mouseX - 12 - 8;
@@ -118,7 +149,8 @@ public class BundleTooltipUtil {
                     tooltipHeight += 2; // gap between title lines and next lines
             }
 
-            tooltipHeight += bundleItems.size() * 10;
+            tooltipTextWidth += (CACHED_TOOLTIP_ITEM_STACKS.size() / 16) * 23;
+            tooltipHeight += (CACHED_TOOLTIP_ITEM_STACKS.size() / 16) * 23;
 
             if (tooltipY < 4)
                 tooltipY = 4;
@@ -150,7 +182,24 @@ public class BundleTooltipUtil {
             mStack.translate(0.0D, 0.0D, zLevel);
 
             int tooltipTop = tooltipY;
-            for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber)
+            ITextProperties firstLine = textLines.get(0);
+            if (firstLine != null)
+                font.func_238416_a_(LanguageMap.getInstance().func_241870_a(firstLine), (float)tooltipX, (float)tooltipY, -1, true, mat, renderType, false, 0, 15728880);
+
+            tooltipY += 10;
+            float prevZLevel = Minecraft.getInstance().getItemRenderer().zLevel;
+
+            Minecraft.getInstance().getItemRenderer().zLevel = zLevel + 1;
+            for (int i = 0; i < CACHED_TOOLTIP_ITEM_STACKS.size(); i++) {
+                ItemStack bundleItem = CACHED_TOOLTIP_ITEM_STACKS.get(i);
+                Map.Entry<Integer, Integer> position = CACHED_TOOLTIP_POSITIONS.get(bundleItem);
+                Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(bundleItem, tooltipX + (i == 0 ? 0 : (i % 16) * position.getKey()),
+                        tooltipY + (i == 0 ? 0 : (i % 4) * position.getValue()));
+            }
+            tooltipY += 40;
+            Minecraft.getInstance().getItemRenderer().zLevel = prevZLevel;
+
+            for (int lineNumber = 1; lineNumber < textLines.size(); ++lineNumber)
             {
                 ITextProperties line = textLines.get(lineNumber);
                 if (line != null)
@@ -161,14 +210,7 @@ public class BundleTooltipUtil {
 
                 tooltipY += 10;
             }
-            float prevZLevel = Minecraft.getInstance().getItemRenderer().zLevel;
-            for (ItemStack bundleItem : bundleItems) {
-                Minecraft.getInstance().getItemRenderer().zLevel = zLevel + 1;
-                Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(bundleItem, tooltipX, tooltipY);
-                tooltipY += 10;
-            }
 
-            Minecraft.getInstance().getItemRenderer().zLevel = prevZLevel;
 
             renderType.finish();
             mStack.pop();

@@ -111,16 +111,20 @@ public final class BundleItemUtils {
         CompoundNBT itemStackNbt = new CompoundNBT();
         ItemStack stackFromBundle = getItemStackFor(bundle, stackToAdd.getItem());
         int index = getItemStackIndex(bundle, stackFromBundle);
-        if(!stackFromBundle.isEmpty()) {
+        boolean sameStack = ItemStack.areItemStacksEqual(stackFromBundle, stackToAdd);
+        if(!stackFromBundle.isEmpty() && sameStack) {
             stackToAdd.setCount(Math.min(stackToAdd.getCount(), getMaxStackSizeForBundle(stack) - stackFromBundle.getCount()));
-        }
-        if(index != -1) {
             stackFromBundle.setCount(stackFromBundle.getCount() + stackToAdd.getCount());
+        }
+        if(sameStack) {
             stackFromBundle.write(itemStackNbt);
+        } else {
+            stackToAdd.write(itemStackNbt);
+        }
+        if(index != -1 && sameStack) {
             items.remove(index);
             items.add(index, itemStackNbt);
         } else {
-            stackToAdd.write(itemStackNbt);
             items.add(itemStackNbt);
         }
         bundleTag.put(BundleResources.BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION, items);
