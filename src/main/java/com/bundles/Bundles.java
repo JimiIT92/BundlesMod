@@ -23,7 +23,6 @@ import java.util.Optional;
 @Mod(BundleResources.MOD_ID)
 public class Bundles {
 
-
     /**
      * Constructor. Initialize the Mod
      */

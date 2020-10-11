@@ -61,7 +61,6 @@ public class BundleClientMessageHandler {
         if(!message.empty) {
             playerEntity.inventory.setItemStack(message.bundle);
         }
-        container.detectAndSendChanges();
     }
 
 }

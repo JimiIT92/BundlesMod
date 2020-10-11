@@ -4,9 +4,7 @@ import com.bundles.init.BundleResources;
 import com.bundles.item.BundleItem;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -69,7 +67,7 @@ public final class BundleItemUtils {
         if(!isBundle(bundle) || isFull(bundle) || isContainer(stack)) {
             return false;
         }
-        ItemStack bundleItemStack = getItemStackFor(bundle, stack.getItem());
+        ItemStack bundleItemStack = getItemStackFor(bundle, stack);
         return bundleItemStack.isEmpty() || bundleItemStack.getCount() < getMaxStackSizeForBundle(stack);
     }
 
@@ -97,9 +95,8 @@ public final class BundleItemUtils {
      * @param bundle Bundle Item Stack
      * @param stack Item Stack to add
      * @param player Player
-     * @param container Container
      */
-    public static void addItemStackToBundle(ItemStack bundle, ItemStack stack, PlayerEntity player, Container container) {
+    public static void addItemStackToBundle(ItemStack bundle, ItemStack stack, PlayerEntity player) {
         if(!isBundle(bundle) || isFull(bundle) || isBundle(stack)) {
             return;
         }
@@ -109,22 +106,18 @@ public final class BundleItemUtils {
         CompoundNBT bundleTag = bundle.getOrCreateTag();
         ListNBT items = bundleTag.getList(BundleResources.BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION, Constants.NBT.TAG_COMPOUND);
         CompoundNBT itemStackNbt = new CompoundNBT();
-        ItemStack stackFromBundle = getItemStackFor(bundle, stackToAdd.getItem());
+        ItemStack stackFromBundle = getItemStackFor(bundle, stackToAdd);
         int index = getItemStackIndex(bundle, stackFromBundle);
-        boolean sameStack = ItemStack.areItemStacksEqual(stackFromBundle, stackToAdd);
-        if(!stackFromBundle.isEmpty() && sameStack) {
+        if(!stackFromBundle.isEmpty()) {
             stackToAdd.setCount(Math.min(stackToAdd.getCount(), getMaxStackSizeForBundle(stack) - stackFromBundle.getCount()));
             stackFromBundle.setCount(stackFromBundle.getCount() + stackToAdd.getCount());
         }
-        if(sameStack) {
+        if(index != -1) {
             stackFromBundle.write(itemStackNbt);
-        } else {
-            stackToAdd.write(itemStackNbt);
-        }
-        if(index != -1 && sameStack) {
             items.remove(index);
             items.add(index, itemStackNbt);
         } else {
+            stackToAdd.write(itemStackNbt);
             items.add(itemStackNbt);
         }
         bundleTag.put(BundleResources.BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION, items);
@@ -138,9 +131,8 @@ public final class BundleItemUtils {
      *
      * @param bundle Bundle
      * @param player Player
-     * @param container Container
      */
-    public static void emptyBundle(ItemStack bundle, PlayerEntity player, Container container) {
+    public static void emptyBundle(ItemStack bundle, PlayerEntity player) {
         if(!isBundle(bundle) || isEmpty(bundle)) {
             return;
         }
@@ -182,11 +174,11 @@ public final class BundleItemUtils {
      * Get the Item Stack for an Item
      *
      * @param bundle Bundle Item Stack
-     * @param item Item to get the Item Stack
+     * @param stack Item Stack
      * @return Item Stack for the Item or Empty Item Stack if not found
      */
-    private static ItemStack getItemStackFor(ItemStack bundle, Item item) {
-        return getItemsFromBundle(bundle).stream().filter(x -> x.getItem().equals(item)).findFirst().orElse(ItemStack.EMPTY);
+    private static ItemStack getItemStackFor(ItemStack bundle, ItemStack stack) {
+        return getItemsFromBundle(bundle).stream().filter(x -> ItemStack.areItemStacksEqual(x, stack)).findFirst().orElse(ItemStack.EMPTY);
     }
 
     /**

@@ -63,16 +63,15 @@ public class BundleServerMessageHandler {
         Slot slot = container.getSlot(message.slotId);
         ItemStack slotStack = slot.getStack();
         if(message.empty) {
-            BundleItemUtils.emptyBundle(message.bundle, playerEntity, container);
+            BundleItemUtils.emptyBundle(message.bundle, playerEntity);
             slotStack = message.bundle;
         } else {
-            BundleItemUtils.addItemStackToBundle(message.bundle, slotStack, playerEntity, container);
+            BundleItemUtils.addItemStackToBundle(message.bundle, slotStack, playerEntity);
             if(!playerEntity.isCreative() || !(container instanceof PlayerContainer)) {
                 playerEntity.inventory.setItemStack(message.bundle);
             }
         }
         slot.putStack(slotStack);
-        container.detectAndSendChanges();
         BundleResources.NETWORK.send(PacketDistributor.PLAYER.with(() -> playerEntity), new BundleClientMessage(message.bundle, message.slotId, slotStack, message.empty));
     }
 }
