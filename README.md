@@ -15,7 +15,11 @@ an item inside the Bundle, unless is a non stackable item. When you are done, le
 
 If you want to take out the Items from the Bundle, right click it and all Items inside the Bundle will be added to your Inventory.
 
-![](tutorial.mp4)
+<iframe width="560" height="315"
+src="https://www.youtube.com/watch?v=jrJ-IGTp_GU" 
+frameborder="0" 
+allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe>
 
 # 👀 Can I put anything inside the Bundle?
 No, there are certain blocks/items that you can't put inside a Bundle. 
