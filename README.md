@@ -39,6 +39,6 @@ You can download this mod on [CurseForge](https://www.curseforge.com/minecraft/m
 
 # 😁 Conclusion
 Minecraft 1.17 is looking forward to be one of the greatest update, full of many new content that we asked for so long!
-This mod aims to introduce one of these new mechanics in 1.16.3, however note that all of this is based purely on 
+This mod aims to introduce one of these new mechanics in 1.15.2 and 1.16.x, however note that all of this is based purely on 
 what has been shown during Minecraft Live 2020, so there might be some apsects that may change or differ entirely 
 from what is inside this mod. That being said, I hope you enjoy it! Let me know if there are any issues on the issue tracker, have a nice day! 😁
