@@ -13,12 +13,12 @@ apply plugin: 'net.minecraftforge.gradle'
 
 group = 'com.bundles'
 version = '1.0'
-archivesBaseName = 'Bundles'
+archivesBaseName = 'Bundles-1.15.2'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200514-1.16'
+    mappings channel: 'snapshot', version: '20201018-1.15.1'
     runs {
         client {
             workingDirectory project.file('run')
@@ -57,7 +57,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.3-34.1.23'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.2.0'
 }
 
 jar {

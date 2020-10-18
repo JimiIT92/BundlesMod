@@ -10,8 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.Collections;
@@ -81,11 +81,11 @@ public final class BundleItemUtils {
     private static boolean isIgnored(ItemStack stack) {
         Item item = stack.getItem();
         if(item instanceof BlockItem) {
-            ITag<Block> blockTag = BlockTags.getCollection().get(BundleResources.BUNDLE_IGNORED_BLOCKS_TAG);
-            return blockTag != null && blockTag.func_230235_a_(((BlockItem)item).getBlock());
+            Tag<Block> blockTag = BlockTags.getCollection().get(BundleResources.BUNDLE_IGNORED_BLOCKS_TAG);
+            return blockTag != null && blockTag.contains(((BlockItem)item).getBlock());
         }
-        ITag<Item> itemTag = ItemTags.getCollection().get(BundleResources.BUNDLE_IGNORED_ITEMS_TAG);
-        return itemTag != null && itemTag.func_230235_a_(item);
+        Tag<Item> itemTag = ItemTags.getCollection().get(BundleResources.BUNDLE_IGNORED_ITEMS_TAG);
+        return itemTag != null && itemTag.contains(item);
     }
 
     /**
