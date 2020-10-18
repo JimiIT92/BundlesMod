@@ -26,12 +26,16 @@ public class BundleClientMessage {
      * If the Bundle should be cleared
      */
     public boolean empty;
+    /**
+     * If the Empty sound should be played
+     */
+    public boolean playEmptySound;
 
     /**
      * Default constructor
      */
     public BundleClientMessage() {
-        this(ItemStack.EMPTY,0, ItemStack.EMPTY, false);
+        this(ItemStack.EMPTY,0, ItemStack.EMPTY, false, false);
     }
 
     /**
@@ -41,12 +45,14 @@ public class BundleClientMessage {
      * @param slotId Item Stack Slot Id
      * @param slotStack Item Stack for Bundle
      * @param empty If the Bundle should be cleared
+     * @param playEmptySound If the Empty sound should be played
      */
-    public BundleClientMessage(ItemStack bundle, int slotId, ItemStack slotStack, boolean empty) {
+    public BundleClientMessage(ItemStack bundle, int slotId, ItemStack slotStack, boolean empty, boolean playEmptySound) {
         this.bundle = bundle;
         this.slotId = slotId;
         this.slotStack = slotStack;
         this.empty = empty;
+        this.playEmptySound = playEmptySound;
     }
 
     /**
@@ -61,6 +67,7 @@ public class BundleClientMessage {
         message.slotId = buffer.readInt();
         message.slotStack = buffer.readItemStack();
         message.empty = buffer.readBoolean();
+        message.playEmptySound = buffer.readBoolean();
         return message;
     }
 
@@ -74,5 +81,6 @@ public class BundleClientMessage {
         buffer.writeInt(this.slotId);
         buffer.writeItemStack(this.slotStack);
         buffer.writeBoolean(this.empty);
+        buffer.writeBoolean(this.playEmptySound);
     }
 }

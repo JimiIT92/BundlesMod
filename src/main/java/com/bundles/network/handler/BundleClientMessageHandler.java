@@ -60,7 +60,9 @@ public class BundleClientMessageHandler {
         Slot slot = container.getSlot(message.slotId);
         slot.putStack(message.slotStack);
         if(message.empty) {
-            player.playSound(SoundEvents.BLOCK_WOOL_BREAK, 1.0F, 1.0F);
+            if(message.playEmptySound) {
+                player.playSound(SoundEvents.BLOCK_WOOL_BREAK, 1.0F, 1.0F);
+            }
         } else {
             player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
             player.inventory.setItemStack(message.bundle);

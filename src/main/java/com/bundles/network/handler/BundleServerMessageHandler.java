@@ -62,7 +62,9 @@ public class BundleServerMessageHandler {
         Container container = playerEntity.openContainer;
         Slot slot = container.getSlot(message.slotId);
         ItemStack slotStack = slot.getStack();
+        boolean playEmptySound = false;
         if(message.empty) {
+            playEmptySound = !BundleItemUtils.isEmpty(message.bundle);
             BundleItemUtils.emptyBundle(message.bundle, playerEntity);
             slotStack = message.bundle;
         } else {
@@ -72,6 +74,6 @@ public class BundleServerMessageHandler {
             }
         }
         slot.putStack(slotStack);
-        BundleResources.NETWORK.send(PacketDistributor.PLAYER.with(() -> playerEntity), new BundleClientMessage(message.bundle, message.slotId, slotStack, message.empty));
+        BundleResources.NETWORK.send(PacketDistributor.PLAYER.with(() -> playerEntity), new BundleClientMessage(message.bundle, message.slotId, slotStack, message.empty, playEmptySound));
     }
 }

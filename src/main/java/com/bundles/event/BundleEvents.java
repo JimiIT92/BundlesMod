@@ -5,15 +5,13 @@ import com.bundles.network.message.BundleServerMessage;
 import com.bundles.util.BundleItemUtils;
 import com.bundles.util.BundleTooltipUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -27,7 +25,6 @@ import java.lang.reflect.Field;
  *
  * @author JimiIT92
  */
-@OnlyIn(Dist.CLIENT)
 public final class BundleEvents {
 
     /**
@@ -43,7 +40,7 @@ public final class BundleEvents {
             ContainerScreen<?> containerScreen = (ContainerScreen<?>)event.getGui();
             Slot slot = containerScreen.getSlotUnderMouse();
             if(slot != null && !(slot instanceof CraftingResultSlot)) {
-                ClientPlayerEntity player = Minecraft.getInstance().player;
+                PlayerEntity player = Minecraft.getInstance().player;
                 if(player != null) {
                     ItemStack draggedItemStack = player.inventory.getItemStack();
                     ItemStack slotStack = slot.getStack();
@@ -86,7 +83,7 @@ public final class BundleEvents {
             ContainerScreen<?> containerScreen = (ContainerScreen<?>)event.getGui();
             Slot slot = containerScreen.getSlotUnderMouse();
             if(slot != null && !(slot instanceof CraftingResultSlot)) {
-                ClientPlayerEntity player = Minecraft.getInstance().player;
+                PlayerEntity player = Minecraft.getInstance().player;
                 if(player != null) {
                     ItemStack slotStack = slot.getStack();
                     if(slot.canTakeStack(player) && slot.isEnabled()
