@@ -49,4 +49,12 @@ public final class BundleResources {
      * Network Resource Location
      */
     public static final ResourceLocation NETWORK_RESOURCE_LOCATION = new ResourceLocation(MOD_ID, "network_channel");
+    /**
+     * Bundle Ignored Blocks Tag
+     */
+    public static final ResourceLocation BUNDLE_IGNORED_BLOCKS_TAG = new ResourceLocation(MOD_ID, "bundle_ignored_blocks");
+    /**
+     * Bundle Ignored Items Tag
+     */
+    public static final ResourceLocation BUNDLE_IGNORED_ITEMS_TAG = new ResourceLocation(MOD_ID, "bundle_ignored_items");
 }

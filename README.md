@@ -1,4 +1,4 @@
-# BUNDLES! <img align="left" width=4% height=4% src="logo.png"/> ![CodeQL](https://github.com/JimiIT92/BundlesMod/workflows/CodeQL/badge.svg) [![](https://img.shields.io/badge/Minecraft-1.16.3-success)](https://minecraft.net/) [![](https://img.shields.io/badge/Forge-1.16.3--34.1.16-important)](https://forums.minecraftforge.net/) [![](http://cf.way2muchnoise.eu/full_412219_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/bundles-mod)
+# BUNDLES! <img align="left" width=4% height=4% src="logo.png"/> ![CodeQL](https://github.com/JimiIT92/BundlesMod/workflows/CodeQL/badge.svg) [![](https://img.shields.io/badge/Minecraft-1.16.3-success)](https://minecraft.net/) [![](https://img.shields.io/badge/Forge-1.16.3--34.1.23+-important?logo=curseforge)](https://forums.minecraftforge.net/) [![](http://cf.way2muchnoise.eu/full_412219_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/bundles-mod)
 
 During Minecraft Live 2020 Mojang announced that in 1.17 a new item will be introduced to the game: the Bundle! 
 This is like an early game version of the Shulker Box, allowing you to save some inventory space.
@@ -17,10 +17,14 @@ If you want to take out the Items from the Bundle, right click it and all Items 
 
 # 👀 Can I put anything inside the Bundle?
 No, there are certain blocks/items that you can't put inside a Bundle. 
-First, you can put another Bundle inside a Bundle, as it will most likely create a black hole at some point. 
-For the same principle, you can't put any block/item that is related to a storage container, 
-so for example you can't put a Chest, a Trapped Chest, a Shulker Box or an Ender Chest inside the Bundle, 
-even if these are empty. However you can do the opposite, so a Bundle can be put inside those blocks without any issue.
+Which blocks or items you ask? Well, you can decide them! By default the mods comes with two tags,
+**bundle\_ignored\_blocks** and **bundle\_ignored\_items**. These two tags contains all the blocks and the items that can't
+be put inside a Bundle. By default you can't put another Bundle, a Chest, a Trapped Chest, an Ender Chest and 
+any Shulker Box inside a Bundle. But if you wish you can always modify those tags to allow those blocks to be
+put inside the Bundle and create some black holes! Or even do the opposite and add other blocks or items
+that you don't want to be put inside the Bundle. Just make sure you put the right thing in the right tag (so blocks
+inside the **bundle\_ignored\_blocks** tag and items inside the **bundle\_ignored\_items** tag). The only limit is
+your creativity!
 
 # 🛍 How many items can fit inside a Bundle?
 You can put up to 64 items inside a Bundle. But as I mentioned above, you can only put half the maximum stack of the same item, 

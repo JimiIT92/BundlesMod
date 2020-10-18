@@ -5,12 +5,13 @@ import com.bundles.item.BundleItem;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.Collections;
@@ -64,7 +65,7 @@ public final class BundleItemUtils {
      * @return True if the Item Stack can be added to a Bundle, False otherwise
      */
     public static boolean canAddItemStackToBundle(ItemStack bundle, ItemStack stack) {
-        if(!isBundle(bundle) || isFull(bundle) || isContainer(stack)) {
+        if(!isBundle(bundle) || isFull(bundle) || isIgnored(stack)) {
             return false;
         }
         ItemStack bundleItemStack = getItemStackFor(bundle, stack);
@@ -77,16 +78,14 @@ public final class BundleItemUtils {
      * @param stack Item Stack
      * @return True if the Item Stack is for a Container Block, False otherwise
      */
-    private static boolean isContainer(ItemStack stack) {
-        if(stack.getItem() instanceof BlockItem) {
-            BlockItem blockItem = (BlockItem)stack.getItem();
-            Block block = blockItem.getBlock();
-            if(block.hasTileEntity(block.getDefaultState())) {
-                TileEntity tileEntity = block.createTileEntity(block.getDefaultState(), null);
-                return tileEntity instanceof LockableLootTileEntity;
-            }
+    private static boolean isIgnored(ItemStack stack) {
+        Item item = stack.getItem();
+        if(item instanceof BlockItem) {
+            ITag<Block> blockTag = BlockTags.getCollection().get(BundleResources.BUNDLE_IGNORED_BLOCKS_TAG);
+            return blockTag != null && blockTag.func_230235_a_(((BlockItem)item).getBlock());
         }
-        return false;
+        ITag<Item> itemTag = ItemTags.getCollection().get(BundleResources.BUNDLE_IGNORED_ITEMS_TAG);
+        return itemTag != null && itemTag.func_230235_a_(item);
     }
 
     /**
@@ -123,7 +122,6 @@ public final class BundleItemUtils {
         bundleTag.put(BundleResources.BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION, items);
         bundle.setTag(bundleTag);
         stack.setCount(stack.getCount() - stackToAdd.getCount());
-        player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
     }
 
     /**
@@ -142,7 +140,6 @@ public final class BundleItemUtils {
         items.clear();
         bundleTag.put(BundleResources.BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION, items);
         bundle.setTag(bundleTag);
-        player.playSound(SoundEvents.BLOCK_WOOL_BREAK, 1.0F, 1.0F);
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.bundles;
 
-import com.bundles.event.BundleEvents;
 import com.bundles.init.BundleItems;
 import com.bundles.init.BundleResources;
 import com.bundles.network.handler.BundleClientMessageHandler;
@@ -39,7 +38,6 @@ public class Bundles {
      * @param event FML Common Setup Event
      */
     public void onCommonSetup(final FMLCommonSetupEvent event) {
-        MinecraftForge.EVENT_BUS.register(BundleEvents.class);
         BundleResources.NETWORK = NetworkRegistry.newSimpleChannel(
                 BundleResources.NETWORK_RESOURCE_LOCATION, () -> BundleResources.MESSAGE_PROTOCOL_VERSION,
                 BundleClientMessageHandler::isThisProtocolAcceptedByClient,

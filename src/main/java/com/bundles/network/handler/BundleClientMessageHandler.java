@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -52,14 +53,17 @@ public class BundleClientMessageHandler {
      * Process the Message
      *
      * @param message Message
-     * @param playerEntity Player
+     * @param player Player
      */
-    private static void processMessage(BundleClientMessage message, ClientPlayerEntity playerEntity) {
-        Container container = playerEntity.openContainer;
+    private static void processMessage(BundleClientMessage message, ClientPlayerEntity player) {
+        Container container = player.openContainer;
         Slot slot = container.getSlot(message.slotId);
         slot.putStack(message.slotStack);
-        if(!message.empty) {
-            playerEntity.inventory.setItemStack(message.bundle);
+        if(message.empty) {
+            player.playSound(SoundEvents.BLOCK_WOOL_BREAK, 1.0F, 1.0F);
+        } else {
+            player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
+            player.inventory.setItemStack(message.bundle);
         }
     }
 
