@@ -16,7 +16,7 @@ public final class BundleItems {
     /**
      * Bundle Items Registry
      */
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, BundleResources.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BundleResources.MOD_ID);
 
     /**
      * Bundle Item
