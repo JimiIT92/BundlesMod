@@ -30,6 +30,9 @@ your creativity!
 You can put up to 64 items inside a Bundle. But as I mentioned above, you can only put half the maximum stack of the same item, 
 as replacing a stack of items with another item won't save you any inventory space.
 
+# 🌐 Where can I download this mod?
+You can download this mod on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/bundles-mod). **I will post new releases only there**. Any other websites that offers you this mod shouldn't be trusted!
+
 # 😁 Conclusion
 Minecraft 1.17 is looking forward to be one of the greatest update, full of many new content that we asked for so long!
 This mod aims to introduce one of these new mechanics in 1.16.3, however note that all of this is based purely on 
