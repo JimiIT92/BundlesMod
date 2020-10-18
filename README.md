@@ -15,6 +15,8 @@ an item inside the Bundle, unless is a non stackable item. When you are done, le
 
 If you want to take out the Items from the Bundle, right click it and all Items inside the Bundle will be added to your Inventory.
 
+![](tutorial.mp4)
+
 # 👀 Can I put anything inside the Bundle?
 No, there are certain blocks/items that you can't put inside a Bundle. 
 Which blocks or items you ask? Well, you can decide them! By default the mods comes with two tags,
