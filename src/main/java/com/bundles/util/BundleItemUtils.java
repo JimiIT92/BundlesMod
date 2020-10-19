@@ -134,7 +134,18 @@ public final class BundleItemUtils {
         if(!isBundle(bundle) || isEmpty(bundle)) {
             return;
         }
-        getItemsFromBundle(bundle).forEach(player::addItemStackToInventory);
+        getItemsFromBundle(bundle).forEach(item -> {
+            if(!player.addItemStackToInventory(item)) {
+                if(!player.isCreative()) {
+                    player.dropItem(item, true);
+                }
+            }
+            else if(item.getCount() > 0) {
+                if(!player.isCreative()) {
+                    player.dropItem(item, true);
+                }
+            }
+        });
         CompoundNBT bundleTag = bundle.getOrCreateTag();
         ListNBT items = bundleTag.getList(BundleResources.BUNDLE_ITEMS_LIST_NBT_RESOURCE_LOCATION, Constants.NBT.TAG_COMPOUND);
         items.clear();
