@@ -69,7 +69,7 @@ public final class BundleItemUtils {
             return false;
         }
         ItemStack bundleItemStack = getItemStackFor(bundle, stack);
-        return bundleItemStack.isEmpty() || bundleItemStack.getCount() < getMaxStackSizeForBundle(stack);
+        return bundleItemStack.isEmpty() || stack.getMaxStackSize() == 1 || bundleItemStack.getCount() < getMaxStackSizeForBundle(stack);
     }
 
     /**
