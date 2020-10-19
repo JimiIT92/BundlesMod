@@ -69,7 +69,7 @@ public final class BundleItemUtils {
             return false;
         }
         ItemStack bundleItemStack = getItemStackFor(bundle, stack);
-        return bundleItemStack.isEmpty() || bundleItemStack.getCount() < getMaxStackSizeForBundle(stack);
+        return bundleItemStack.isEmpty() || stack.getMaxStackSize() == 1 || bundleItemStack.getCount() < getMaxStackSizeForBundle(stack);
     }
 
     /**
@@ -93,9 +93,8 @@ public final class BundleItemUtils {
      *
      * @param bundle Bundle Item Stack
      * @param stack Item Stack to add
-     * @param player Player
      */
-    public static void addItemStackToBundle(ItemStack bundle, ItemStack stack, PlayerEntity player) {
+    public static void addItemStackToBundle(ItemStack bundle, ItemStack stack) {
         if(!isBundle(bundle) || isFull(bundle) || isBundle(stack)) {
             return;
         }
@@ -107,11 +106,11 @@ public final class BundleItemUtils {
         CompoundNBT itemStackNbt = new CompoundNBT();
         ItemStack stackFromBundle = getItemStackFor(bundle, stackToAdd);
         int index = getItemStackIndex(bundle, stackFromBundle);
-        if(!stackFromBundle.isEmpty()) {
+        if(!stackFromBundle.isEmpty() && stack.getMaxStackSize() > 1) {
             stackToAdd.setCount(Math.min(stackToAdd.getCount(), getMaxStackSizeForBundle(stack) - stackFromBundle.getCount()));
             stackFromBundle.setCount(stackFromBundle.getCount() + stackToAdd.getCount());
         }
-        if(index != -1) {
+        if(index != -1 && stack.getMaxStackSize() > 1) {
             stackFromBundle.write(itemStackNbt);
             items.remove(index);
             items.add(index, itemStackNbt);

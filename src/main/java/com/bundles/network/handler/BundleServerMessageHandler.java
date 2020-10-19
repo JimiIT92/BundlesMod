@@ -68,7 +68,7 @@ public class BundleServerMessageHandler {
             BundleItemUtils.emptyBundle(message.bundle, playerEntity);
             slotStack = message.bundle;
         } else {
-            BundleItemUtils.addItemStackToBundle(message.bundle, slotStack, playerEntity);
+            BundleItemUtils.addItemStackToBundle(message.bundle, slotStack);
             if(!playerEntity.isCreative() || !(container instanceof PlayerContainer)) {
                 playerEntity.inventory.setItemStack(message.bundle);
             }
