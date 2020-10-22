@@ -19,6 +19,10 @@ If you want to take out the Items from the Bundle, right click it and all Items 
 
 [![How to use the Bundles! mod](https://yt-embed.herokuapp.com/embed?v=jrJ-IGTp_GU)](https://www.youtube.com/watch?v=jrJ-IGTp_GU "How to use the Bundles! mod")
 
+Also featured in Boodlyneck's Mods of the Week serie!
+
+[![Top 10 Minecraft Mods Of The Week | Bundles!, BetterEnd, Subterranean Wilderness, Visp, and More!](https://yt-embed.herokuapp.com/embed?v=97_AjrikgpE)](https://www.youtube.com/watch?v=97_AjrikgpE "Top 10 Minecraft Mods Of The Week | Bundles!, BetterEnd, Subterranean Wilderness, Visp, and More!")
+
 # 👀 Can I put anything inside the Bundle?
 No, there are certain blocks/items that you can't put inside a Bundle. 
 Which blocks or items you ask? Well, you can decide them! By default, the mod comes with two tags,
