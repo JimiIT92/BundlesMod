@@ -19,6 +19,16 @@ public class BundleItem extends Item {
     public BundleItem() {
         super(new Item.Properties().group(ItemGroup.TOOLS).maxStackSize(1).maxDamage(BundleResources.MAX_BUNDLE_ITEMS));
     }
+    
+    /**
+     * Check if the item is damageable
+     *
+     * @return False
+     */
+    @Override
+    public boolean isDamageable() {
+        return false;
+    }
 
     /**
      * Get the Durability Bar Color
