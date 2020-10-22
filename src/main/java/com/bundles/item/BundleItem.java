@@ -21,6 +21,16 @@ public class BundleItem extends Item {
     }
 
     /**
+     * Check if the item is damageable
+     *
+     * @return False
+     */
+    @Override
+    public boolean isDamageable() {
+        return false;
+    }
+
+    /**
      * Get the Durability Bar Color
      *
      * @param stack Item Stack
