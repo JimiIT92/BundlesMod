@@ -5,7 +5,7 @@
 The only supported version will be the latest one, so make sure 
 you have it if you want to receive some assistance in case of issues.
 
-You can download the Mod from the [Official CurseForge Page](https://www.curseforge.com/minecraft/mc-mods/pack-my-bundles/files)
+You can download the Mod from the [Official CurseForge Page](https://www.curseforge.com/minecraft/mc-mods/bundles-mod/files)
 
 ## Reporting a Vulnerability
 
