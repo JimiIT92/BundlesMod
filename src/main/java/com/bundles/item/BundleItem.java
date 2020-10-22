@@ -31,6 +31,18 @@ public class BundleItem extends Item {
     }
 
     /**
+     * Check if the item can be enchanted with books
+     *
+     * @param stack Bundle Item Stack
+     * @param book Enchantment Book
+     * @return False
+     */
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
+    }
+
+    /**
      * Get the Durability Bar Color
      *
      * @param stack Item Stack
