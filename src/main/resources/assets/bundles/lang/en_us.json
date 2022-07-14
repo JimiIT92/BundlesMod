@@ -1,3 +1,7 @@
 {
-  "item.bundles.bundle": "Bundle"
+  "item.bundles.bundle": "Bundle",
+  "item.bundles.bundle.fullness": "%s/%s",
+  "subtitles.item.bundle.drop_contents": "Bundle empties",
+  "subtitles.item.bundle.insert": "Item packed",
+  "subtitles.item.bundle.remove_one": "Item unpacked"
 }

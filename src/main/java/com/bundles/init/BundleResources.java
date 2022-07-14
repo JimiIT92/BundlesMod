@@ -44,7 +44,7 @@ public final class BundleResources {
     /**
      * Message Protocol Version
      */
-    public static final String MESSAGE_PROTOCOL_VERSION = "1.3";
+    public static final String MESSAGE_PROTOCOL_VERSION = "1.4";
     /**
      * Network Resource Location
      */

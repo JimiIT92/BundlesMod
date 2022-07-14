@@ -1,0 +1,26 @@
+{
+  "bundle_drop_contents": {
+    "subtitle": "subtitles.item.bundle.drop_contents",
+    "sounds": [
+      "bundles:bundle_drop_contents1",
+      "bundles:bundle_drop_contents2",
+      "bundles:bundle_drop_contents3"
+    ]
+  },
+  "bundle_insert": {
+    "subtitle": "subtitles.item.bundle.insert",
+    "sounds": [
+      "bundles:bundle_insert1",
+      "bundles:bundle_insert2",
+      "bundles:bundle_insert3"
+    ]
+  },
+  "bundle_remove_one": {
+    "subtitle": "subtitles.item.bundle.remove_one",
+    "sounds": [
+      "bundles:bundle_remove_one1",
+      "bundles:bundle_remove_one2",
+      "bundles:bundle_remove_one3"
+    ]
+  }
+}
