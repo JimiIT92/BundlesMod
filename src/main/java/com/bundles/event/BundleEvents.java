@@ -2,9 +2,11 @@ package com.bundles.event;
 
 import com.bundles.init.BundleResources;
 import com.bundles.item.BundleItem;
+import com.bundles.network.BundleMessage;
 import com.bundles.tooltip.BundleTooltip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,14 +40,23 @@ public final class BundleEvents {
             ContainerScreen<?> containerScreen = (ContainerScreen<?>)event.getGui();
             Slot slot = containerScreen.getSlotUnderMouse();
             PlayerEntity player = Minecraft.getInstance().player;
-            if(slot != null && !(slot instanceof CraftingResultSlot) && slot.isActive() && player != null) {
+            int button = event.getButton();
+            if(slot != null && !(slot instanceof CraftingResultSlot) && slot.isActive() && player != null && button == 1) {
                 ItemStack carriedItemStack = player.inventory.getCarried();
                 ItemStack slotStack = slot.getItem();
-                int button = event.getButton();
+                boolean sendServerMessage = !player.isCreative() || !(containerScreen instanceof CreativeScreen);
                 if(carriedItemStack.getItem() instanceof BundleItem) {
-                    ((BundleItem)carriedItemStack.getItem()).overrideStackedOnOther(carriedItemStack, slot, button, player);
+                    if(sendServerMessage) {
+                        BundleResources.NETWORK.sendToServer(new BundleMessage(carriedItemStack, slotStack, slot.index, button, true));
+                    } else {
+                        ((BundleItem)carriedItemStack.getItem()).overrideStackedOnOther(carriedItemStack, slot, player);
+                    }
                 } else if(slotStack.getItem() instanceof BundleItem) {
-                    ((BundleItem)slotStack.getItem()).overrideOtherStackedOnMe(slotStack, carriedItemStack, slot, button, player);
+                    if(sendServerMessage) {
+                        BundleResources.NETWORK.sendToServer(new BundleMessage(slotStack, carriedItemStack, slot.index, button, false));
+                    } else {
+                        ((BundleItem)slotStack.getItem()).overrideOtherStackedOnMe(slotStack, carriedItemStack, slot, player);
+                    }
                 }
             }
         }

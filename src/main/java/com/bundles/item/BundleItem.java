@@ -25,7 +25,9 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -365,26 +367,23 @@ public class BundleItem extends Item {
      * Add an Item to the Bundle when the player right-clicks the Bundle on it,
      * or remove on Item if the Player right-clicks on an empty slot
      *
-     * @param stack Bundle Item Stack
+     * @param bundle Bundle Item Stack
      * @param slot Clicked Slot
-     * @param clickButton Clicked Button
      * @param player Player adding or removing the Item
      */
-    public void overrideStackedOnOther(ItemStack stack, Slot slot, int clickButton, PlayerEntity player) {
-        if(clickButton != 1) {
-            return;
-        }
+    public Map.Entry<ItemStack, Integer> overrideStackedOnOther(ItemStack bundle, Slot slot, PlayerEntity player) {
         ItemStack slotStack = slot.getItem();
         if(slotStack.isEmpty()) {
             this.playRemoveOneSound(player);
-            removeOne(stack).ifPresent(s -> add(stack, safeInsert(slot, s)));
-        } else if(canFit(stack)) {
-            int weight = (BundleResources.MAX_BUNDLE_ITEMS - getContentWeight(stack)) / getWeight(stack);
-            int quantity = add(stack, safeTake(slot, stack.getCount(), weight, player));
+            removeOne(bundle).ifPresent(s -> add(bundle, safeInsert(slot, s)));
+        } else if(canFit(slotStack)) {
+            int weight = (BundleResources.MAX_BUNDLE_ITEMS - getContentWeight(bundle)) / getWeight(slotStack);
+            int quantity = add(bundle, safeTake(slot, slotStack.getCount(), weight, player));
             if(quantity > 0) {
                 this.playInsertSound(player);
             }
         }
+        return new AbstractMap.SimpleEntry<>(bundle, slotStack.getCount());
     }
 
     /**
@@ -393,11 +392,10 @@ public class BundleItem extends Item {
      * @param bundle Bundle Item Stack
      * @param stack Item Stack to add
      * @param slot Clicked Slot
-     * @param clickButton Clicked Button
      * @param player Player adding the Item
      */
-    public void overrideOtherStackedOnMe(ItemStack bundle, ItemStack stack, Slot slot, int clickButton, PlayerEntity player) {
-        if(clickButton == 1 && allowModification(slot, player)) {
+    public Map.Entry<ItemStack, Integer> overrideOtherStackedOnMe(ItemStack bundle, ItemStack stack, Slot slot, PlayerEntity player) {
+        if(allowModification(slot, player)) {
             if(stack.isEmpty()) {
                 removeOne(bundle).ifPresent(s -> {
                     this.playRemoveOneSound(player);
@@ -411,6 +409,7 @@ public class BundleItem extends Item {
                 }
             }
         }
+        return new AbstractMap.SimpleEntry<>(bundle, stack.getCount());
     }
 
     /**
