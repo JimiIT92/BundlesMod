@@ -5,7 +5,9 @@ import com.bundles.init.BundleResources;
 import com.bundles.init.BundleSounds;
 import com.bundles.item.BundleItem;
 import com.bundles.network.BundleMessage;
+import com.bundles.network.BundleSoundMessage;
 import com.bundles.network.handler.BundleServerMessageHandler;
+import com.bundles.network.handler.BundleSoundMessageHandler;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -55,11 +57,15 @@ public class Bundles {
     public void onCommonSetup(final FMLCommonSetupEvent event) {
         BundleResources.NETWORK = NetworkRegistry.newSimpleChannel(
                 BundleResources.NETWORK_RESOURCE_LOCATION, () -> BundleResources.MESSAGE_PROTOCOL_VERSION,
-                protocolVersion -> true,
+                BundleSoundMessageHandler::isThisProtocolAcceptedByClient,
                 BundleServerMessageHandler::isThisProtocolAcceptedByServer);
         BundleResources.NETWORK.registerMessage(BundleResources.BUNDLE_SERVER_MESSAGE_ID, BundleMessage.class,
                 BundleMessage::encode, BundleMessage::decode,
                 BundleServerMessageHandler::onMessageReceived,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        BundleResources.NETWORK.registerMessage(BundleResources.BUNDLE_SOUND_MESSAGE_ID, BundleSoundMessage.class,
+                BundleSoundMessage::encode, BundleSoundMessage::decode,
+                BundleSoundMessageHandler::onMessageReceived,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 }

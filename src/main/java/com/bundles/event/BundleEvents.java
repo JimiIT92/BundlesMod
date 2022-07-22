@@ -49,13 +49,13 @@ public final class BundleEvents {
                     if(sendServerMessage) {
                         BundleResources.NETWORK.sendToServer(new BundleMessage(carriedItemStack, slotStack, slot.index, button, true));
                     } else {
-                        ((BundleItem)carriedItemStack.getItem()).overrideStackedOnOther(carriedItemStack, slot, player);
+                        ((BundleItem)carriedItemStack.getItem()).overrideStackedOnOther(carriedItemStack, slot, player, false);
                     }
                 } else if(slotStack.getItem() instanceof BundleItem) {
                     if(sendServerMessage) {
                         BundleResources.NETWORK.sendToServer(new BundleMessage(slotStack, carriedItemStack, slot.index, button, false));
                     } else {
-                        ((BundleItem)slotStack.getItem()).overrideOtherStackedOnMe(slotStack, carriedItemStack, slot, player);
+                        ((BundleItem)slotStack.getItem()).overrideOtherStackedOnMe(slotStack, carriedItemStack, slot, player, false);
                     }
                 }
             }

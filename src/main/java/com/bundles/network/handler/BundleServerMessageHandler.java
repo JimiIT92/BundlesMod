@@ -64,9 +64,9 @@ public final class BundleServerMessageHandler {
         ItemStack slotStack = message.item;
         Map.Entry<ItemStack, Integer> bundleAndSlotStackCount;
         if(message.stackOnOther) {
-            bundleAndSlotStackCount = ((BundleItem)bundle.getItem()).overrideStackedOnOther(bundle, slot, player);
+            bundleAndSlotStackCount = ((BundleItem)bundle.getItem()).overrideStackedOnOther(bundle, slot, player, true);
         } else {
-            bundleAndSlotStackCount = ((BundleItem)bundle.getItem()).overrideOtherStackedOnMe(bundle, slotStack, slot, player);
+            bundleAndSlotStackCount = ((BundleItem)bundle.getItem()).overrideOtherStackedOnMe(bundle, slotStack, slot, player, true);
         }
         bundle = bundleAndSlotStackCount.getKey();
         int slotStackCount = bundleAndSlotStackCount.getValue();

@@ -38,9 +38,9 @@ public final class BundleResources {
      */
     public static final byte BUNDLE_SERVER_MESSAGE_ID = 1;
     /**
-     * Bundle Client Message ID
+     * Bundle Sound Message ID
      */
-    public static final byte BUNDLE_CLIENT_MESSAGE_ID = 2;
+    public static final byte BUNDLE_SOUND_MESSAGE_ID = 2;
     /**
      * Message Protocol Version
      */

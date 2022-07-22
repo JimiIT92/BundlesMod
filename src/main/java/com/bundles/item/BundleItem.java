@@ -3,6 +3,7 @@ package com.bundles.item;
 import com.bundles.init.BundleItems;
 import com.bundles.init.BundleResources;
 import com.bundles.init.BundleSounds;
+import com.bundles.network.BundleSoundMessage;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -22,6 +23,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -194,8 +196,22 @@ public class BundleItem extends Item {
      * Play a sound when one item is removed from the Bundle
      *
      * @param entity Entity removing the item
+     * @param sendPacket If the sound should be played using a network packet
      */
-    private void playRemoveOneSound(Entity entity) {
+    private void playRemoveOneSound(Entity entity, boolean sendPacket) {
+        if(sendPacket) {
+            BundleResources.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) entity), new BundleSoundMessage(1));
+        } else {
+            playRemoveOneSoundFor(entity);
+        }
+    }
+
+    /**
+     * Play a sound when one item is removed from the Bundle
+     *
+     * @param entity Entity removing the item
+     */
+    public static void playRemoveOneSoundFor(Entity entity) {
         entity.playSound(BundleSounds.BUNDLE_REMOVE_ONE.get(), 0.8F, 0.8F + entity.level.getRandom().nextFloat() * 0.4F);
     }
 
@@ -203,8 +219,22 @@ public class BundleItem extends Item {
      * Play a sound when one item is added to the Bundle
      *
      * @param entity Entity adding the item
+     * @param sendPacket If the sound should be played using a network packet
      */
-    private void playInsertSound(Entity entity) {
+    private void playInsertSound(Entity entity, boolean sendPacket) {
+        if(sendPacket) {
+            BundleResources.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) entity), new BundleSoundMessage(0));
+        } else {
+            playInsertSoundFor(entity);
+        }
+    }
+
+    /**
+     * Play a sound when one item is added to the Bundle
+     *
+     * @param entity Entity adding the item
+     */
+    public static void playInsertSoundFor(Entity entity) {
         entity.playSound(BundleSounds.BUNDLE_INSERT.get(), 0.8F, 0.8F + entity.level.getRandom().nextFloat() * 0.4F);
     }
 
@@ -370,17 +400,18 @@ public class BundleItem extends Item {
      * @param bundle Bundle Item Stack
      * @param slot Clicked Slot
      * @param player Player adding or removing the Item
+     * @param fromPacket If the function has been called from a Network Packet
      */
-    public Map.Entry<ItemStack, Integer> overrideStackedOnOther(ItemStack bundle, Slot slot, PlayerEntity player) {
+    public Map.Entry<ItemStack, Integer> overrideStackedOnOther(ItemStack bundle, Slot slot, PlayerEntity player, boolean fromPacket) {
         ItemStack slotStack = slot.getItem();
         if(slotStack.isEmpty()) {
-            this.playRemoveOneSound(player);
+            this.playRemoveOneSound(player, fromPacket);
             removeOne(bundle).ifPresent(s -> add(bundle, safeInsert(slot, s)));
         } else if(canFit(slotStack)) {
             int weight = (BundleResources.MAX_BUNDLE_ITEMS - getContentWeight(bundle)) / getWeight(slotStack);
             int quantity = add(bundle, safeTake(slot, slotStack.getCount(), weight, player));
             if(quantity > 0) {
-                this.playInsertSound(player);
+                this.playInsertSound(player, fromPacket);
             }
         }
         return new AbstractMap.SimpleEntry<>(bundle, slotStack.getCount());
@@ -393,18 +424,19 @@ public class BundleItem extends Item {
      * @param stack Item Stack to add
      * @param slot Clicked Slot
      * @param player Player adding the Item
+     * @param fromPacket If the function has been called from a Network Packet
      */
-    public Map.Entry<ItemStack, Integer> overrideOtherStackedOnMe(ItemStack bundle, ItemStack stack, Slot slot, PlayerEntity player) {
+    public Map.Entry<ItemStack, Integer> overrideOtherStackedOnMe(ItemStack bundle, ItemStack stack, Slot slot, PlayerEntity player, boolean fromPacket) {
         if(allowModification(slot, player)) {
             if(stack.isEmpty()) {
                 removeOne(bundle).ifPresent(s -> {
-                    this.playRemoveOneSound(player);
+                    this.playRemoveOneSound(player, fromPacket);
                     player.addItem(s);
                 });
             } else {
                 int quantity = add(bundle, stack);
                 if(quantity > 0) {
-                    this.playInsertSound(player);
+                    this.playInsertSound(player, fromPacket);
                     stack.shrink(quantity);
                 }
             }
