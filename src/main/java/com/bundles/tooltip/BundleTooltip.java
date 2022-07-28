@@ -37,6 +37,9 @@ import java.util.stream.Collectors;
  */
 public class BundleTooltip {
 
+    /**
+     * Bundle Tooltip Texture Location
+     */
     private static final ResourceLocation BUNDLE_LOCATION = new ResourceLocation(BundleResources.MOD_ID, "textures/gui/container/bundle.png");
 
     /**
@@ -48,6 +51,11 @@ public class BundleTooltip {
         renderImage(event);
     }
 
+    /**
+     * Render the Tooltip Image
+     *
+     * @param event Render Tooltip Event
+     */
     private static void renderImage(final RenderTooltipEvent.Pre event) {
         final FontRenderer font = event.getFontRenderer();
         final int mouseX = event.getX();
@@ -62,12 +70,24 @@ public class BundleTooltip {
         boolean flag = weight >= BundleResources.MAX_BUNDLE_ITEMS;
         GuiUtils.preItemToolTip(bundle);
 
-        drawHoveringText(bundle, matrixStack, getTooltipFromItem(bundle), event, GuiUtils.DEFAULT_BACKGROUND_COLOR, GuiUtils.DEFAULT_BORDER_COLOR_START, GuiUtils.DEFAULT_BORDER_COLOR_END, i, j, flag, contents, itemRenderer);
+        drawHoveringText(bundle, matrixStack, getTooltipFromItem(bundle), event, i, j, flag, contents, itemRenderer);
         drawBorder(mouseX, mouseY, i, j, matrixStack);
 
         GuiUtils.postItemToolTip();
     }
 
+    /**
+     * Render a Tooltip Slot
+     *
+     * @param x Slot X Coordinate
+     * @param y Slot Y Coordinate
+     * @param index Slot Index
+     * @param isBundleFull If the Bundle is Full
+     * @param fontRenderer Font Renderer
+     * @param matrixStack Matrix Stack
+     * @param itemRenderer Item Renderer
+     * @param contents Bundle Content
+     */
     private static void renderSlot(int x, int y, int index, boolean isBundleFull, FontRenderer fontRenderer, MatrixStack matrixStack, ItemRenderer itemRenderer, List<ItemStack> contents) {
         if (index >= contents.size()) {
             blit(matrixStack, x, y, isBundleFull ? Texture.BLOCKED_SLOT : Texture.SLOT);
@@ -81,96 +101,100 @@ public class BundleTooltip {
         }
     }
 
-    private static void drawHoveringText(@Nonnull final ItemStack stack, MatrixStack matrixStack, List<? extends ITextProperties> textLines, final RenderTooltipEvent.Pre event, int backgroundColor, int borderColorStart, int borderColorEnd, int gridSizeX, int gridSizeY,
-                                         boolean flag, List<ItemStack> contents, ItemRenderer itemRenderer)
-    {
-        if (!textLines.isEmpty())
-        {
+    /**
+     * Render the Tooltip Lines
+     *
+     * @param stack Bundle Item Stack
+     * @param matrixStack Matrix Stack
+     * @param textLines Tooltip Text Lines
+     * @param event Render Tooltip Event
+     * @param gridSizeX Tooltip Grid Width
+     * @param gridSizeY Tooltip Grid Height
+     * @param flag If the Bundle is full
+     * @param contents Bundle Content
+     * @param itemRenderer Item Renderer
+     */
+    private static void drawHoveringText(@Nonnull final ItemStack stack, MatrixStack matrixStack, List<? extends ITextProperties> textLines, final RenderTooltipEvent.Pre event, int gridSizeX, int gridSizeY, boolean flag, List<ItemStack> contents, ItemRenderer itemRenderer) {
+        int backgroundColor = GuiUtils.DEFAULT_BACKGROUND_COLOR;
+        int borderColorStart = GuiUtils.DEFAULT_BORDER_COLOR_START;
+        int borderColorEnd = GuiUtils.DEFAULT_BORDER_COLOR_END;
+
+        if (!textLines.isEmpty()) {
             int mouseX = event.getX();
             int mouseY = event.getY();
             int screenWidth = event.getScreenWidth();
             int screenHeight = event.getScreenHeight();
             int maxTextWidth = event.getMaxWidth();
             FontRenderer font = event.getFontRenderer();
+            int tooltipTextWidth = 0;
+            boolean needsWrap = false;
+            int titleLinesCount = 1;
+            int tooltipX = mouseX + 12;
+            int tooltipHeight = 8;
+            final int zLevel = 400;
 
             RenderSystem.disableRescaleNormal();
             RenderSystem.disableDepthTest();
-            int tooltipTextWidth = 0;
 
-            for (ITextProperties textLine : textLines)
-            {
+            for (ITextProperties textLine : textLines) {
                 int textLineWidth = font.width(textLine);
                 if (textLineWidth > tooltipTextWidth)
                     tooltipTextWidth = textLineWidth;
             }
 
-            boolean needsWrap = false;
-
-            int titleLinesCount = 1;
-            int tooltipX = mouseX + 12;
-            if (tooltipX + tooltipTextWidth + 4 > screenWidth)
-            {
+            if (tooltipX + tooltipTextWidth + 4 > screenWidth) {
                 tooltipX = mouseX - 16 - tooltipTextWidth;
-                if (tooltipX < 4) // if the tooltip doesn't fit on the screen
-                {
-                    if (mouseX > screenWidth / 2)
-                        tooltipTextWidth = mouseX - 12 - 8;
-                    else
-                        tooltipTextWidth = screenWidth - 16 - mouseX;
+                if (tooltipX < 4) {
+                    tooltipTextWidth = (mouseX > screenWidth / 2) ? (mouseX - 12 - 8) : (screenWidth - 16 - mouseX);
                     needsWrap = true;
                 }
             }
 
-            if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth)
-            {
+            if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth) {
                 tooltipTextWidth = maxTextWidth;
                 needsWrap = true;
             }
 
-            if (needsWrap)
-            {
+            if (needsWrap) {
                 int wrappedTooltipWidth = 0;
                 List<ITextProperties> wrappedTextLines = new ArrayList<>();
-                for (int i = 0; i < textLines.size(); i++)
-                {
+                for (int i = 0; i < textLines.size(); i++) {
                     ITextProperties textLine = textLines.get(i);
                     List<ITextProperties> wrappedLine = font.getSplitter().splitLines(textLine, tooltipTextWidth, Style.EMPTY);
-                    if (i == 0)
+                    if (i == 0) {
                         titleLinesCount = wrappedLine.size();
+                    }
 
-                    for (ITextProperties line : wrappedLine)
-                    {
+                    for (ITextProperties line : wrappedLine) {
                         int lineWidth = font.width(line);
-                        if (lineWidth > wrappedTooltipWidth)
+                        if (lineWidth > wrappedTooltipWidth) {
                             wrappedTooltipWidth = lineWidth;
+                        }
                         wrappedTextLines.add(line);
                     }
                 }
+
                 tooltipTextWidth = wrappedTooltipWidth;
                 textLines = wrappedTextLines;
-
-                if (mouseX > screenWidth / 2)
-                    tooltipX = mouseX - 16 - tooltipTextWidth;
-                else
-                    tooltipX = mouseX + 12;
+                tooltipX = mouseX > screenWidth / 2 ? (mouseX - 16 - tooltipTextWidth) : (mouseX + 12);
             }
 
             int tooltipY = mouseY - 12;
-            int tooltipHeight = 8;
 
-            if (textLines.size() > 1)
-            {
+            if (textLines.size() > 1) {
                 tooltipHeight += (textLines.size() - 1) * 10;
-                if (textLines.size() > titleLinesCount)
-                    tooltipHeight += 2; // gap between title lines and next lines
+                if (textLines.size() > titleLinesCount) {
+                    tooltipHeight += 2;
+                }
             }
 
-            if (tooltipY < 4)
+            if (tooltipY < 4) {
                 tooltipY = 4;
-            else if (tooltipY + tooltipHeight + 4 > screenHeight)
+            }
+            else if (tooltipY + tooltipHeight + 4 > screenHeight) {
                 tooltipY = screenHeight - tooltipHeight - 4;
+            }
 
-            final int zLevel = 400;
             RenderTooltipEvent.Color colorEvent = new RenderTooltipEvent.Color(stack, textLines, matrixStack, tooltipX, tooltipY, font, backgroundColor, borderColorStart, borderColorEnd);
             MinecraftForge.EVENT_BUS.post(colorEvent);
             backgroundColor = colorEvent.getBackground();
@@ -196,40 +220,38 @@ public class BundleTooltip {
 
             int tooltipTop = tooltipY;
 
-            for (int lineNumber = 0; lineNumber < titleLinesCount; ++lineNumber)
-            {
-                ITextProperties line = textLines.get(lineNumber);
-                if (line != null)
+            for (int i = 0; i < titleLinesCount; ++i) {
+                ITextProperties line = textLines.get(i);
+                if (line != null) {
                     font.drawInBatch(LanguageMap.getInstance().getVisualOrder(line), (float)tooltipX, (float)tooltipY, -1, true, mat, renderType, false, 0, 15728880);
-
-                if (lineNumber + 1 == titleLinesCount)
-                    tooltipY += 2;
-
-                tooltipY += 10;
+                }
+                tooltipY += (i + 1 == titleLinesCount) ? 2 : 10;
             }
 
-            int k = 0;
+            tooltipY += 10;
 
-            for(int l = 0; l < gridSizeY; ++l) {
-                for(int i1 = 0; i1 < gridSizeX; ++i1) {
-                    int j1 = mouseX + i1 * 18 + 1;
-                    int k1 = mouseY + l * 20 + 1;
-                    renderSlot(j1, k1, k++, flag, font, matrixStack, itemRenderer, contents);
+            for(int i = 0, k = 0; i < gridSizeY; ++i) {
+                for(int j = 0; j < gridSizeX; ++j) {
+                    int gridTooltipX = tooltipX + j * 18 + 1;
+                    int gridTooltipY = tooltipY + i * 20 + 1;
+                    renderSlot(gridTooltipX, gridTooltipY, k++, flag, font, matrixStack, itemRenderer, contents);
+                    tooltipY += gridTooltipY + 2;
                 }
             }
 
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuilder();
 
             if(!bufferBuilder.building()) {
-                bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+                bufferBuilder.begin(7, DefaultVertexFormats.POSITION_COLOR_TEX);
             }
 
-            for (int lineNumber = titleLinesCount; lineNumber < textLines.size(); ++lineNumber)
-            {
-                ITextProperties line = textLines.get(lineNumber);
-                if (line != null)
-                    font.drawInBatch(LanguageMap.getInstance().getVisualOrder(line), (float)tooltipX, (float)tooltipY, -1, true, mat, renderType, false, 0, 15728880);
+            tooltipY += 10;
 
+            for (int i = titleLinesCount; i < textLines.size(); ++i) {
+                ITextProperties line = textLines.get(i);
+                if (line != null) {
+                    font.drawInBatch(LanguageMap.getInstance().getVisualOrder(line), (float)tooltipX, (float)tooltipY, -1, true, mat, renderType, false, 0, 15728880);
+                }
                 tooltipY += 10;
             }
 
@@ -243,11 +265,13 @@ public class BundleTooltip {
         }
     }
 
-    private static List<ITextComponent> getTooltipFromItem(ItemStack itemStack) {
-        Minecraft minecraft = Minecraft.getInstance();
-        return itemStack.getTooltipLines(minecraft.player, minecraft.options.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
-    }
-
+    /**
+     * Render a Slot inside the Tooltip
+     *
+     * @param matrixStack Matrix Stack
+     * @param x Slot X Coordinate
+     * @param y Slot Y Coordinate
+     */
     public static void renderSlotHighlight(MatrixStack matrixStack, int x, int y) {
         RenderSystem.disableDepthTest();
         RenderSystem.colorMask(true, true, true, false);
@@ -270,7 +294,28 @@ public class BundleTooltip {
         RenderSystem.enableDepthTest();
     }
 
-    protected static void fillGradient(Matrix4f pMatrix, BufferBuilder pBuilder, int pX1, int pY1, int pX2, int pY2) {
+    /**
+     * Get the Item Tooltip Lines
+     *
+     * @param itemStack Bundle Item Stack
+     * @return Item Tooltip Lines
+     */
+    private static List<ITextComponent> getTooltipFromItem(ItemStack itemStack) {
+        Minecraft minecraft = Minecraft.getInstance();
+        return itemStack.getTooltipLines(minecraft.player, minecraft.options.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
+    }
+
+    /**
+     * Draw a gradient
+     *
+     * @param matrix Matrix
+     * @param bufferBuilder Buffer Builder
+     * @param x1 Start X Coordinate
+     * @param y1 Start Y Coordinate
+     * @param x2 End X Coordinate
+     * @param y2 End Y Coordinate
+     */
+    protected static void fillGradient(Matrix4f matrix, BufferBuilder bufferBuilder, int x1, int y1, int x2, int y2) {
         float blitOffset = 400;
         int color = -2130706433;
         float f = (float)(color >> 24 & 255) / 255.0F;
@@ -281,10 +326,10 @@ public class BundleTooltip {
         float f5 = (float)(color >> 16 & 255) / 255.0F;
         float f6 = (float)(color >> 8 & 255) / 255.0F;
         float f7 = (float)(color & 255) / 255.0F;
-        pBuilder.vertex(pMatrix, (float)pX2, (float)pY1, blitOffset).color(f1, f2, f3, f).endVertex();
-        pBuilder.vertex(pMatrix, (float)pX1, (float)pY1, blitOffset).color(f1, f2, f3, f).endVertex();
-        pBuilder.vertex(pMatrix, (float)pX1, (float)pY2, blitOffset).color(f5, f6, f7, f4).endVertex();
-        pBuilder.vertex(pMatrix, (float)pX2, (float)pY2, blitOffset).color(f5, f6, f7, f4).endVertex();
+        bufferBuilder.vertex(matrix, (float)x2, (float)y1, blitOffset).color(f1, f2, f3, f).endVertex();
+        bufferBuilder.vertex(matrix, (float)x1, (float)y1, blitOffset).color(f1, f2, f3, f).endVertex();
+        bufferBuilder.vertex(matrix, (float)x1, (float)y2, blitOffset).color(f5, f6, f7, f4).endVertex();
+        bufferBuilder.vertex(matrix, (float)x2, (float)y2, blitOffset).color(f5, f6, f7, f4).endVertex();
     }
 
     /**
@@ -314,6 +359,14 @@ public class BundleTooltip {
         blit(matrixStack, x + slotWidth * 18 + 1, y + slotHeight * 20, Texture.BORDER_CORNER_BOTTOM);
     }
 
+    /**
+     * Blit a Texture on the Tooltip
+     *
+     * @param matrixStack Matrix Stack
+     * @param x Texture X Coordinate
+     * @param y Texture Y Coordinate
+     * @param texture Texture to draw
+     */
     private static void blit(MatrixStack matrixStack, int x, int y, Texture texture) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getInstance().getTextureManager().bind(BUNDLE_LOCATION);

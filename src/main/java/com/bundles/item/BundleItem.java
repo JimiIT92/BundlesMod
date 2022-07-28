@@ -165,6 +165,7 @@ public class BundleItem extends Item {
      */
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable World world, List<ITextComponent> tooltips, @Nonnull ITooltipFlag tooltipFlag) {
+        getContents(stack).forEach(content -> tooltips.add(content.getHoverName().copy().append(" x").append(String.valueOf(content.getCount()))));
         tooltips.add((new TranslationTextComponent("item.bundles.bundle.fullness", getContentWeight(stack), BundleResources.MAX_BUNDLE_ITEMS)).withStyle(TextFormatting.GRAY));
     }
 
