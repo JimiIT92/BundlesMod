@@ -62,19 +62,19 @@ public final class BundleServerMessageHandler {
         Slot slot = container.slots.stream().filter(x -> x.index == message.slotId).findFirst().orElse(container.getSlot(message.slotId));
         ItemStack bundle = message.bundle;
         ItemStack slotStack = message.item;
-        Map.Entry<ItemStack, Integer> bundleAndSlotStackCount;
+        Map.Entry<ItemStack, ItemStack> bundleAndSlotStack;
         if(message.stackOnOther) {
-            bundleAndSlotStackCount = ((BundleItem)bundle.getItem()).overrideStackedOnOther(bundle, slot, player, true);
+            bundleAndSlotStack = ((BundleItem)bundle.getItem()).overrideStackedOnOther(bundle, slot, player, true);
         } else {
-            bundleAndSlotStackCount = ((BundleItem)bundle.getItem()).overrideOtherStackedOnMe(bundle, slotStack, slot, player, true);
+            bundleAndSlotStack = ((BundleItem)bundle.getItem()).overrideOtherStackedOnMe(bundle, slotStack, slot, player, true);
         }
-        bundle = bundleAndSlotStackCount.getKey();
-        int slotStackCount = bundleAndSlotStackCount.getValue();
-        if(slotStackCount <= 0) {
+        bundle = bundleAndSlotStack.getKey();
+        ItemStack slotStackResult = bundleAndSlotStack.getValue();
+        if(!slotStackResult.isEmpty()) {
             slot.set(bundle);
             player.inventory.setCarried(ItemStack.EMPTY);
         } else {
-            slotStack.setCount(slotStackCount);
+            slotStack.setCount(slotStackResult.getCount());
             slot.set(slotStack);
             player.inventory.setCarried(bundle);
         }

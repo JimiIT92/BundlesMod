@@ -402,7 +402,7 @@ public class BundleItem extends Item {
      * @param player Player adding or removing the Item
      * @param fromPacket If the function has been called from a Network Packet
      */
-    public Map.Entry<ItemStack, Integer> overrideStackedOnOther(ItemStack bundle, Slot slot, PlayerEntity player, boolean fromPacket) {
+    public Map.Entry<ItemStack, ItemStack> overrideStackedOnOther(ItemStack bundle, Slot slot, PlayerEntity player, boolean fromPacket) {
         ItemStack slotStack = slot.getItem();
         if(slotStack.isEmpty()) {
             this.playRemoveOneSound(player, fromPacket);
@@ -414,7 +414,7 @@ public class BundleItem extends Item {
                 this.playInsertSound(player, fromPacket);
             }
         }
-        return new AbstractMap.SimpleEntry<>(bundle, slotStack.getCount());
+        return new AbstractMap.SimpleEntry<>(bundle, slotStack);
     }
 
     /**
@@ -426,7 +426,7 @@ public class BundleItem extends Item {
      * @param player Player adding the Item
      * @param fromPacket If the function has been called from a Network Packet
      */
-    public Map.Entry<ItemStack, Integer> overrideOtherStackedOnMe(ItemStack bundle, ItemStack stack, Slot slot, PlayerEntity player, boolean fromPacket) {
+    public Map.Entry<ItemStack, ItemStack> overrideOtherStackedOnMe(ItemStack bundle, ItemStack stack, Slot slot, PlayerEntity player, boolean fromPacket) {
         if(allowModification(slot, player)) {
             if(stack.isEmpty()) {
                 removeOne(bundle).ifPresent(s -> {
@@ -441,7 +441,7 @@ public class BundleItem extends Item {
                 }
             }
         }
-        return new AbstractMap.SimpleEntry<>(bundle, stack.getCount());
+        return new AbstractMap.SimpleEntry<>(bundle, stack);
     }
 
     /**
