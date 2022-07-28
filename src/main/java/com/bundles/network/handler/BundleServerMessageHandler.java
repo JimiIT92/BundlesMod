@@ -7,6 +7,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -70,13 +71,17 @@ public final class BundleServerMessageHandler {
         }
         bundle = bundleAndSlotStack.getKey();
         ItemStack slotStackResult = bundleAndSlotStack.getValue();
-        if(!slotStackResult.isEmpty()) {
-            slot.set(bundle);
-            player.inventory.setCarried(ItemStack.EMPTY);
-        } else {
-            slotStack.setCount(slotStackResult.getCount());
-            slot.set(slotStack);
-            player.inventory.setCarried(bundle);
+        boolean isAir = slotStackResult.getItem().equals(Items.AIR) && slotStackResult.getCount() != 0;
+        if(!isAir) {
+            int slotStackCount = slotStackResult.getCount();
+            if(slotStackCount <= 0) {
+                slot.set(bundle);
+                player.inventory.setCarried(ItemStack.EMPTY);
+            } else {
+                slotStack.setCount(slotStackCount);
+                slot.set(slotStack);
+                player.inventory.setCarried(bundle);
+            }
         }
         player.refreshContainer(player.containerMenu);
     }
